@@ -27,34 +27,53 @@ dominantDimension: ia-priority/merger-message-promotion
 
 ## Sections (in render order)
 
-1. **header** (system-component role: `header`) — persistent nav.
-   Composition: white ground, Helvetia wordmark left, audience
-   switcher (Privatkunden / Unternehmen) + Suche + Login + language
-   switcher (DE/FR/IT/EN) right. Unchanged from captured structure —
-   the announcement strip that used to sit here is removed (see
-   section 2, promoted).
+1. **header** (system-component role: `header`) — **corrected
+   2026-08-10, restored two-row structure matching the live site**
+   (the intervening single-row render had collapsed the structure and
+   dropped "Agentur finden" entirely — a primary conversion path for
+   an insurer):
+   - **Row 1**: audience switcher (Privatkunden / Unternehmen) left,
+     then Suche + Login + language switcher (DE/FR/IT/EN), Helvetia
+     wordmark right.
+   - **Row 2**: main nav (Versicherung, Vorsorge, Bank, Immobilien,
+     Lebenssituationen, Kontakt & Services) left, "Agentur finden"
+     (with location-pin icon) right-aligned —
+     `pages/ch-web-de-privatkunden-html.json#ctas[label=Agentur finden]`,
+     href `/ch/web/de/privatkunden/kontakt/beratung/agenturen.html`,
+     captured verbatim. **Known gap**: the Immobilien and
+     Lebenssituationen nav-item hrefs are pattern-inferred (following
+     the confirmed `/privatkunden/{{versicherungen,vorsorge,bank,kontakt}}.html`
+     shape), not directly captured — worth verifying against the live
+     site before ship.
+   - The old 12px dismissible announcement strip that used to sit
+     above this header is gone — its message now lives in the hero
+     (section 2), no longer as header chrome.
 
-2. **hero** (PROMOTED — the direction's core structural move). Full-
-   bleed photo ground (same captured image: mother lifting child,
-   `stardust/current/pages/ch-web-de-privatkunden-html.json#media.imgs[1]`,
+2. **hero** — **corrected 2026-08-10, H1 reverted**: the merger
+   statement's earlier promotion to H1 is undone per user correction
+   — "Mehr als eine Versicherung" is the current post-merger brand
+   promise (per the zusammenschluss.html page's own framing: new
+   identity, same partner), not a stale tagline, so it stays H1. The
+   merger fact is elevated from a *dismissible* 12px strip to a
+   *persistent, non-dismissible* banner directly beneath H1 — a real
+   structural improvement over the original site, short of replacing
+   the headline. Full-bleed photo ground (same captured image: mother
+   lifting child, `pages/ch-web-de-privatkunden-html.json#media.imgs[1]`,
    `startseite.jpg`), white overlay card, left-anchored.
-   - **H1** (new top of hierarchy): "Helvetia und Baloise sind jetzt
-     eins." — promoted verbatim from the captured announcement strip
-     (`pages/...#body[0]`), previously rendered as a 12px dismissible
-     grey strip above the header.
-   - **Subhead**: "Mehr als eine Versicherung" — the former H1,
-     demoted to framing subhead beneath the merger statement.
-   - **Body**: "Helvetia – Ihre verlässliche Partnerin für alle
-     Finanzfragen." — captured lede, unchanged position relative to
-     the (now-subordinate) tagline.
-   - **Primary CTA**: "Was der Zusammenschluss für Sie bedeutet" →
-     `/ch/web/de/ueber-uns/zusammenschluss.html` (registry label,
-     `DESIGN.json#extensions.ctaLabelRegistry`; href is the captured
-     merger-detail link, previously reachable only from the FAQ
-     section below).
-   - **Secondary CTA**: "Mehr über Helvetia erfahren" →
+   - **H1**: "Mehr als eine Versicherung" — captured verbatim
+     (`pages/...#headings[0]`), restored to its original position.
+   - **Merger banner** (persistent, no dismiss/close control): "Helvetia
+     und Baloise sind jetzt eins." (`pages/...#body[0]`, captured
+     verbatim) paired with CTA "Was der Zusammenschluss für Sie
+     bedeutet" → `/ch/web/de/ueber-uns/zusammenschluss.html` (registry
+     label, `DESIGN.json#extensions.ctaLabelRegistry`).
+   - **Lede**: "Helvetia – Ihre verlässliche Partnerin für alle
+     Finanzfragen." — captured verbatim, restored to its original
+     position beneath the banner.
+   - **CTA**: "Mehr über Helvetia erfahren" →
      `/ch/web/de/ueber-uns/helvetia-schweiz.html` (registry label;
-     this was the original hero's only CTA, demoted to secondary).
+     this is the original hero's own captured CTA, restored to
+     primary position).
 
 3. **quick-access** ("Wir sind für Sie da.") — **corrected 2026-08-10**:
    originally miscaptured and rendered as an empty "product-finder
@@ -72,14 +91,14 @@ dominantDimension: ia-priority/merger-message-promotion
 
 4. **FAQ band** ("Ihre Fragen – unsere Antworten") — unchanged
    composition. Heading + "Helvetia und Baloise sind jetzt eins. Was
-   heisst das für Sie?" body copy (captured verbatim) + CTA. **CTA
-   label change**: was "Mehr erfahren" → `zusammenschluss.html`; now
-   reads "Was der Zusammenschluss für Sie bedeutet" is already the
-   *hero's* primary CTA (section 2), so this section's CTA becomes
-   "Mehr über Helvetia erfahren" → `helvetia-schweiz.html` instead,
-   avoiding a duplicate-destination CTA on the same page immediately
-   after the hero already sent that traffic. Placeholder image block
-   unchanged (opaque to extraction).
+   heisst das für Sie?" body copy (captured verbatim) + CTA.
+   **Corrected 2026-08-10**: CTA reverted to its originally-captured
+   target, "Was der Zusammenschluss für Sie bedeutet" →
+   `zusammenschluss.html` — this matches the section's own question
+   ("was heisst das für Sie?") and no longer collides with the hero's
+   CTA now that the hero's primary CTA is back to "Mehr über Helvetia
+   erfahren" → `helvetia-schweiz.html`. Image: real captured photo
+   (`assets/zusammenschluss.jpg`, see § Unsourced content below).
 
 5. **Vorsorge/Anlegen teaser** ("Vorsorgen und Anlegen") — unchanged.
    Captured body copy + two CTAs ("Mehr zu Vorsorgen" →
@@ -168,7 +187,7 @@ dominantDimension: ia-priority/merger-message-promotion
 
 ## Data attributes
 
-- `header[data-section="header"][data-intent="navigate"][data-layout="full-width-light"]`
+- `header[data-section="header"][data-intent="navigate"][data-layout="two-row"]`
 - `section[data-section="hero"][data-intent="brand-statement"][data-layout="split-photo-overlay"][data-items="2"]`
 - `section[data-section="quick-access"][data-intent="navigate"][data-layout="tile-grid-6"][data-items="6"]`
 - `section[data-section="faq-band"][data-intent="inform"][data-layout="text-image-split"][data-items="1"]`

@@ -5,6 +5,60 @@ up to date as work proceeds. Reverse-chronological.
 
 ---
 
+## 2026-08-10 — Two reverts: H1 restored, header structure restored
+
+**1. H1 reverted from the merger statement back to "Mehr als eine
+Versicherung".** The direction's original promotion of "Helvetia und
+Baloise sind jetzt eins" to H1 over-corrected — user points out
+`zusammenschluss.html` frames the merger as *"new identity, same
+partner"*, i.e. "Mehr als eine Versicherung" **is** the current
+post-merger promise, not a legacy tagline competing with it. Resolution:
+H1 restored to "Mehr als eine Versicherung" (captured verbatim,
+`headings[0]`). The merger fact keeps its structural upgrade — from a
+12px *dismissible* strip to a *persistent, non-dismissible* banner
+directly beneath H1, paired with its own CTA ("Was der Zusammenschluss
+für Sie bedeutet" → `zusammenschluss.html`). Net effect versus the
+original site: the merger message is now permanent and inline instead
+of a one-time closeable notice, without dethroning the brand's
+standing headline. Type scale (38/30/24) and CTA registry unchanged —
+only the copy assigned to each slot moved. FAQ-band's CTA reverted in
+lockstep to its own originally-captured target (`zusammenschluss.html`,
+matching that section's own question) now that it no longer collides
+with the hero's restored primary CTA.
+
+**2. Header two-row structure restored; "Agentur finden" recovered.**
+An earlier render had collapsed the header into a single row and, in
+doing so, silently dropped "Agentur finden" — a captured, real link
+(`ctas[label=Agentur finden]` → `/kontakt/beratung/agenturen.html`)
+and a primary conversion path for an insurer. Restored the live
+site's actual two-row structure: row 1 is audience switcher (left) →
+search/login/language switcher → logo (right); row 2 is the main nav
+(left) → Agentur finden, right-aligned with a location-pin icon. Both
+rows collapse sensibly on mobile (row 2's nav goes behind the existing
+hamburger; Agentur finden stays visible at every width since it's a
+primary path, not secondary chrome).
+
+**Known gap flagged, not fixed this pass:** the Immobilien and
+Lebenssituationen main-nav hrefs are pattern-inferred (extrapolated
+from the confirmed `/privatkunden/{{versicherungen,vorsorge,bank,
+kontakt}}.html` shape), not directly captured in `pages/ch-web-de-
+privatkunden-html.json`. Worth a direct check against the live site
+before this ships.
+
+**Process note.** Folded the full `_provenance` block (all prior
+post-render corrections + critique/audit/adapt/motion) into the
+Python generator script itself this round, rather than patching it
+onto the generated HTML after the fact — the previous two rounds lost
+that block on every regeneration and once nearly broke the file
+(dropped HTML comment terminator). Future edits to this prototype
+should extend the script, not hand-edit the generated output.
+
+Re-ran the full check suite after both fixes: 0 404s, 1 `<main>`
+landmark, 0 accessible-name collisions, 0 horizontal overflow at all
+7 target viewports.
+
+---
+
 ## 2026-08-10 — Post-render correction: "product-finder" was real content, not a widget
 
 **What happened.** The third and last placeholder box in the prototype
