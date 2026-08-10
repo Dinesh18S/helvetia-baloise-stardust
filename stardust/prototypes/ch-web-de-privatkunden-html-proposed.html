@@ -21,6 +21,8 @@
       what: "Rebuilt the third placeholder (was mislabeled 'product-finder' widget) as the real 'Wir sind für Sie da.' quick-access section — 4 accent-colored tiles + 2 plain tiles. This is the page's primary task navigation, not a widget. Titles/descriptions/hrefs sourced verbatim from pages/ch-web-de-privatkunden-html.json (ctas[] + body[18]); tile order, colors, and 4+2 layout read directly off evidence/before/Versicherung-und-Vorsorge-*.png. Zero placeholders remained on this page after this correction."
     - at: "2026-08-10T17:00:00Z"
       what: "Reverted H1 back to 'Mehr als eine Versicherung' per user correction — the zusammenschluss.html page states this is the current post-merger promise, not a stale tagline. Moved 'Helvetia und Baloise sind jetzt eins' to a persistent (non-dismissible) banner directly below H1, paired with the 'Was der Zusammenschluss für Sie bedeutet' CTA. Restored the two-row header structure matching the live site (row 1: audience switch, search/login/lang, logo right; row 2: main nav + Agentur finden right-aligned) — the single-row header from the prior render had dropped the Agentur finden link entirely, a primary conversion path. FAQ-band CTA reverted to its originally-captured target (zusammenschluss.html) to match its own question copy and avoid duplicating the hero's restored primary CTA (helvetia-schweiz.html)."
+    - at: "2026-08-10T18:00:00Z"
+      what: "Replaced an invented hand-drawn stroke-icon set (service-tiles + quick-access tiles) with real DAM-hosted flat-illustration SVGs, fetched live from the DOM the same way logo.svg was captured (svg[use href] targets, resolved per-tile against pages/ch-web-de-privatkunden-html.json content, downloaded to stardust/prototypes/assets/icons/). The invented set violated the project's no-invented-assets rule. Also corrected the service-tile card background from accent-pastel to plain neutral (--color-surface) after re-cropping evidence/before/...png at full resolution showed the live site does NOT tint this section — only quick-access and stat-row use the pastel accent family. Added real icons (previously absent) to the stat-row tiles and the contact-band sidebar links, and swapped the header's hand-drawn 'Agentur finden' pin for the real twenty-location.svg asset, for the same reason. Two stat-row icons (leaf-purple.svg, wind-turbine-red.svg) were identified but not added — their corresponding stats ('Bäume in Schutzwaldprojekten gepflanzt', 'Strom aus erneuerbaren Quellen') have no captured numeric value, so the tiles stay omitted per the no-invented-content rule."
   critique:
     method: "DEGRADED single-context (no sub-agent Task tool orchestration used this pass; assessed inline against the direction brief and the a11y/hierarchy fixes it named)"
     verdict: "pass, 0 P0/P1"
@@ -38,6 +40,8 @@
       - "0 image/asset 404s"
       - "LCP hero image: loading=eager, fetchpriority=high; prefers-reduced-motion overrides scroll-behavior"
       - "Agentur finden present and reachable in header row 2 (previously missing — a primary conversion path per user correction)"
+      - "0 references to the invented icon set (icon-badge/quick-icon classes) remain; all tile icons are real DAM-fetched SVGs; 0 leaked SVG markup in any accessible name"
+      - "1 detect.mjs 'warning' finding (broken-image, line 19) verified as a false positive — the regex matched the literal string '<img data-src>' inside this file's own provenance comment (documentation prose describing the fix), not an actual <img> tag in the rendered page"
   adapt:
     - breakpoints: [1920, 1440, 1280, 800, 414, 375, 360]
       decisions: "header row 2's main-nav collapses to CSS-only hamburger below 900px (Agentur finden stays visible); header row 1 wraps naturally; two-col sections stack below 900px; stat/quick-access/footer grids reflow 4→2→1 columns; carousels are native horizontal-scroll with visible controls"
@@ -131,7 +135,7 @@ header[data-section="header"] { border-bottom: 1px solid var(--color-border); ba
 .lang-switch { display: flex; gap: 10px; }
 .lang-switch button[aria-current="true"] { font-weight: 700; text-decoration: underline; }
 .agentur-finden { display: inline-flex; align-items: center; gap: 6px; color: var(--color-primary); font-size: 14px; font-weight: 700; text-decoration: none; white-space: nowrap; }
-.agentur-finden svg { width: 16px; height: 16px; }
+.agentur-finden svg { width: 16px; height: 16px; fill: currentColor; vertical-align: -3px; }
 .hamburger { display: none; }
 @media (max-width: 900px) {
   .main-nav { display: none; }
@@ -176,13 +180,15 @@ section.surface-alt { background: var(--color-surface); }
 .carousel-btn { width: 40px; height: 40px; border-radius: var(--radius-pill); background: var(--color-primary); color: #fff; border: none; font-size: 20px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 .carousel-btn:disabled { opacity: 0.35; cursor: default; }
 
-.service-card { background: var(--color-background); border-radius: var(--radius-md); padding: var(--space-lg); }
-.icon-badge { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: var(--radius-pill); margin-bottom: var(--space-md); color: var(--color-primary); }
-.icon-badge svg { width: 24px; height: 24px; }
-.icon-badge--purple { background: var(--color-accent-purple-strong); }
-.icon-badge--red { background: var(--color-accent-red-strong); }
-.icon-badge--yellow { background: var(--color-accent-yellow-strong); }
-.icon-badge--green { background: var(--color-accent-green-strong); }
+/* service-card: plain neutral surface — the live site does NOT tint this
+   section with the pastel accent family, only quick-access/stat-row do
+   (confirmed against evidence/before/... at full resolution) */
+.service-card { background: var(--color-surface); border-radius: var(--radius-md); padding: var(--space-lg); }
+/* real DAM flat-illustration icons — bare, no badge/circle background (matches
+   the live site exactly; the icon's own multicolour art carries the color) */
+.tile-icon { display: block; width: 48px; height: 48px; margin-bottom: var(--space-md); }
+.tile-icon svg { width: 100%; height: 100%; display: block; }
+.tile-icon--sm { width: 32px; height: 32px; margin-bottom: var(--space-sm); }
 .card-link { display: inline-block; margin-top: var(--space-sm); text-decoration: underline; font-size: 14px; }
 
 .article-card { background: var(--color-background); border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--color-border); }
@@ -200,7 +206,10 @@ section[data-section="contact-cta-band"] h2, section[data-section="contact-cta-b
 .contact-list li { display: flex; gap: var(--space-sm); align-items: flex-start; }
 .contact-list li::before { content: "\2713"; flex-shrink: 0; }
 .contact-band-secondary { display: flex; flex-direction: column; gap: var(--space-md); }
-.contact-band-secondary a { color: #fff; text-decoration: underline; }
+.contact-band-secondary a { display: flex; align-items: center; gap: var(--space-sm); color: #fff; text-decoration: none; font-size: 14px; }
+.contact-band-secondary a strong { font-weight: 700; }
+.contact-band-secondary .tile-icon { margin-bottom: 0; flex-shrink: 0; }
+.contact-band-secondary .tile-icon svg { fill: currentColor; }
 section[data-section="contact-cta-band"] .btn-secondary { background: transparent; color: #fff; border-color: #fff; }
 section[data-section="contact-cta-band"] .btn-secondary:hover { background: rgba(255,255,255,0.12); }
 
@@ -226,9 +235,6 @@ section[data-section="contact-cta-band"] .btn-secondary:hover { background: rgba
 .quick-tile--yellow { background: var(--color-accent-yellow); }
 .quick-tile--red { background: var(--color-accent-red); }
 .quick-tile:not([class*="quick-tile--"]) { background: var(--color-background); border-color: var(--color-border); }
-.quick-icon { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: var(--radius-pill); color: var(--color-primary); background: rgba(0,13,110,0.08); }
-.quick-icon svg { width: 20px; height: 20px; }
-.quick-icon--plain { background: var(--color-surface); }
 
 /* footer */
 footer[data-section="footer"] { background: var(--color-primary); color: #fff; padding-block: var(--space-xxl) var(--space-xl); }
@@ -287,7 +293,24 @@ footer[data-section="footer"] { background: var(--color-primary); color: #fff; p
       <li><a href="https://www.helvetia.com/ch/web/de/privatkunden/kontakt.html">Kontakt &amp; Services</a></li>
     </ul>
     <a class="agentur-finden" href="https://www.helvetia.com/ch/web/de/privatkunden/kontakt/beratung/agenturen.html">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s7-6.5 7-11.5A7 7 0 0 0 5 9.5C5 14.5 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+      <span aria-hidden="true"><svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 425.2 425.2" style="enable-background:new 0 0 425.2 425.2;" xml:space="preserve">
+<g id="Hilfslinien">
+</g>
+<g id="Icon">
+	<g>
+		<path d="M212.5,191.6c-30.4,0-55.2-24.7-55.2-55.2c0-30.4,24.7-55.2,55.2-55.2c30.4,0,55.2,24.7,55.2,55.2
+			S242.9,191.6,212.5,191.6z M212.5,101.7c-19.2,0-34.8,15.6-34.8,34.8s15.6,34.8,34.8,34.8s34.7-15.6,34.7-34.8
+			C247.3,117.4,231.7,101.7,212.5,101.7z"/>
+		<path d="M212.5,425c-0.9,0-2.1-0.2-3.1-0.5l0,0c-3.1-0.8-6.1-2.1-8.9-3.8l-0.8-0.5c-9.1-5.4-17-12.7-22.7-21.5
+			c-40.2-60.6-76.9-147.4-100.6-209.6c-5.8-15.5-8.7-31.8-8.7-48.5C67.7,63.1,132.7,0,212.8,0c79.9,0,145.1,63.1,145.1,140.7
+			c0,16.6-2.9,32.8-8.7,48.3c-23.8,62.1-60.5,149-100.6,209.6c-5.8,8.7-13.7,16.3-23,21.6l-0.9,0.5c-2.6,1.5-5.4,2.6-8.1,3.5
+			C214.9,424.8,213.4,425,212.5,425z M212.5,23.2C145.1,23.2,90.4,76,90.4,140.9c0,13.8,2.5,27.3,7.4,40.2
+			c23.3,61.1,59.4,146.2,98.3,205c3.8,5.8,9.2,10.9,15.5,14.6l0.9,0.5c0,0,0,0,0.2,0l0,0l0.9-0.6c6.3-3.7,11.5-8.6,15.5-14.6
+			c39-58.9,75-144.1,98.3-205.1c4.9-12.9,7.4-26.4,7.4-40.2C334.6,75.9,279.8,23.2,212.5,23.2z"/>
+	</g>
+</g>
+</svg></span>
       Agentur finden
     </a>
   </div>
@@ -319,25 +342,56 @@ footer[data-section="footer"] { background: var(--color-primary); color: #fff; p
       <div class="quick-grid quick-grid--4">
         
         <a class="quick-tile quick-tile--green" href="https://www.helvetia.com/ch/web/de/privatkunden/kontakt/schaden-melden.html">
-          <span class="quick-icon quick-icon--green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 13l1.5-4.5A2 2 0 0 1 6.4 7h11.2a2 2 0 0 1 1.9 1.5L21 13"/><rect x="3" y="13" width="18" height="5" rx="1.5"/><circle cx="7.5" cy="18.5" r="1.5"/><circle cx="16.5" cy="18.5" r="1.5"/></svg></span>
+          <span class="tile-icon" aria-hidden="true"><svg id="Ebene_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 40 40">
+  
+  <g>
+    <path d="M29.142,26.079c.139,1.95,1.832,3.418,3.782,3.279,1.95-.139,3.418-1.832,3.279-3.782-.003-.043-.007-.086-.012-.129-.21-1.944-1.956-3.349-3.9-3.138-1.893.205-3.285,1.871-3.15,3.771M30.905,25.921c-.087-.974.632-1.834,1.606-1.921s1.834.632,1.921,1.606c.087.974-.632,1.835-1.606,1.922s-1.835-.632-1.922-1.606h0" style="fill: #94e3d4;"/>
+    <path d="M30.905,25.921c.088.974.949,1.692,1.923,1.604.974-.088,1.692-.949,1.604-1.923-.088-.974-.949-1.693-1.923-1.605-.974.088-1.693.949-1.605,1.923" style="fill: #000d6e;"/>
+    <path d="M3.451,25.568c-.188,1.946,1.237,3.676,3.182,3.864,1.946.188,3.676-1.237,3.864-3.182.004-.045.008-.09.01-.136.113-1.952-1.377-3.626-3.328-3.739-1.899-.11-3.546,1.3-3.729,3.193M5.215,25.704c.076-.975.928-1.704,1.903-1.628.975.076,1.704.928,1.628,1.903h0c-.076.975-.928,1.704-1.903,1.628-.975-.076-1.704-.928-1.628-1.903" style="fill: #94e3d4;"/>
+    <path d="M5.215,25.705c-.075.975.655,1.827,1.63,1.901.975.075,1.827-.655,1.901-1.63s-.655-1.827-1.63-1.901-1.827.655-1.901,1.63" style="fill: #000d6e;"/>
+    <path d="M4.731,17.404l-2.988-.231-.291,1.172,3.186.247c.323.027.607-.212.634-.535,0-.004,0-.008,0-.013.028-.325-.212-.611-.536-.639-.002,0-.004,0-.006,0M21.377,19.07c.027.325.312.566.636.54.001,0,.003,0,.004,0l2.349-.212c.324-.028.564-.317.535-.644s-.316-.569-.641-.539l-2.348.211c-.325.028-.565.315-.536.639,0,.002,0,.004,0,.006M7.486,18.18c-.028.325.213.61.538.638.002,0,.003,0,.005,0l2.352.182c.324.025.609-.221.634-.547s-.218-.614-.543-.637l-2.352-.183c-.325-.025-.608.218-.633.543,0,.001,0,.003,0,.004" style="fill: #94e3d4;"/>
+  </g>
+  <path d="M18.04,22.196l-2.447-1.402.188-.327.418-.729,1.452-2.538-1.467-.113-13.172-1.019c-.652-.046-1.219.444-1.268,1.096v.012l2.985.231c.33.025.569.307.543.637s-.304.573-.634.549l-3.187-.248L.004,24.226c-.051.584.382,1.099.966,1.15.003,0,.006,0,.01,0l1.294.1c.201-2.596,2.474-4.543,5.069-4.342s4.543,2.474,4.342,5.07l.079.006,3.808.295,2.468-4.31ZM10.38,19l-2.352-.182c-.325-.025-.568-.308-.543-.633,0-.002,0-.003,0-.005.023-.325.304-.57.629-.548.001,0,.003,0,.004,0l2.352.182c.325.025.568.308.543.633,0,.002,0,.003,0,.005-.023.325-.304.57-.629.548-.001,0-.003,0-.004,0" style="fill: #1b5951;"/>
+  <path d="M18.527,11.313l-9.573-.74s-.199-.027-.271-.021c-.237.017-.451.177-.621.378-.016.017-.029.036-.039.057-.041.044-.077.092-.106.145l-2.412,3.944,2.059.159,2.052-3.428,8.262.64.649-1.134ZM26.472,11.937c-.863-.604-1.912-.884-2.962-.788l-4.032.362-.452,1.225,4.59-.413c.769-.068,1.538.136,2.172.576l3.412,2.513,1.786-.162-4.516-3.313Z" style="fill: #94e3d4;"/>
+  <path d="M40,22.574l-2.773-.512.07-.37.152-.826.426-2.307-5.569-2.241-12.713,1.143-1.211,3.285,2.645.976-.29.788-.13.354-1.52,4.118,8.879-.798c-.231-2.595,1.683-4.887,4.277-5.123,2.596-.231,4.889,1.683,5.124,4.278l.024-.002,2.133-.192.474-2.571ZM24.367,19.398l-2.348.211c-.324.03-.612-.209-.641-.534,0-.002,0-.004,0-.006-.032-.324.205-.613.529-.645.002,0,.003,0,.005,0l2.349-.212c.325-.029.611.21.64.535,0,.002,0,.004,0,.005.032.324-.205.613-.529.645-.002,0-.003,0-.005,0" style="fill: #1b5951;"/>
+</svg></span>
           <h3>Schaden melden</h3>
           <p>Melden Sie uns Ihren Schaden oder beantragen Sie Leistungen jederzeit online.</p>
         </a>
 
         <a class="quick-tile quick-tile--purple" href="https://www.helvetia.com/ch/web/de/privatkunden/kontakt/services/praemienrechner.html">
-          <span class="quick-icon quick-icon--purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M8 7h8"/><path d="M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01M8 19h.01M12 19h.01"/></svg></span>
+          <span class="tile-icon" aria-hidden="true"><svg id="Ebene_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 40 40">
+  
+  <path d="M40,19.167V6.667c0-3.682-2.985-6.667-6.667-6.667h-12.5v19.167h19.167ZM20.833,40h12.5c3.682,0,6.667-2.985,6.667-6.667v-12.5h-19.167v19.167ZM0,20.833v12.5c0,3.682,2.985,6.667,6.667,6.667h12.5v-19.167H0ZM19.167,0H6.667C2.985,0,0,2.985,0,6.667v12.5h19.167V0Z" style="fill: #b8b2ff;"/>
+  <path d="M13.333,10.833h-6.667c-.46,0-.833-.373-.833-.833s.373-.833.833-.833h6.667c.46,0,.833.373.833.833s-.373.833-.833.833M33.917,12.167l-2.533-2.55,2.367-2.367c.318-.324.318-.843,0-1.167-.324-.327-.852-.329-1.178-.005-.002.002-.003.003-.005.005l-2.367,2.367-2.367-2.367c-.322-.322-.845-.322-1.167,0-.322.322-.322.844,0,1.167l2.367,2.367-2.55,2.55c-.318.324-.318.843,0,1.167.158.161.374.251.6.25.22-.003.429-.093.583-.25l2.533-2.533,2.55,2.533c.302.322.809.338,1.131.036.012-.012.024-.024.036-.036.322-.302.338-.809.036-1.131-.012-.012-.024-.024-.036-.036M33.333,29.167h-6.667c-.46,0-.833-.373-.833-.833s.373-.833.833-.833h6.667c.46,0,.833.373.833.833s-.373.833-.833.833M33.333,34.167h-6.667c-.46,0-.833-.373-.833-.833s.373-.833.833-.833h6.667c.46,0,.833.373.833.833s-.373.833-.833.833M13.333,29.167h-2.5v-2.5c0-.46-.373-.833-.833-.833s-.833.373-.833.833v2.5h-2.5c-.46,0-.833.373-.833.833s.373.833.833.833h2.5v2.5c0,.46.373.833.833.833s.833-.373.833-.833v-2.5h2.5c.46,0,.833-.373.833-.833s-.373-.833-.833-.833" style="fill: #6c2273;"/>
+</svg></span>
           <h3>Prämie berechnen</h3>
           <p>Berechnen Sie Ihre Prämie oder fordern Sie eine unverbindliche Offerte an.</p>
         </a>
 
         <a class="quick-tile quick-tile--yellow" href="https://www.helvetia.com/ch/web/de/privatkunden/kontakt.html">
-          <span class="quick-icon quick-icon--yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="3" y="13" width="4" height="6" rx="1.5"/><rect x="17" y="13" width="4" height="6" rx="1.5"/><path d="M19 19v1a2 2 0 0 1-2 2h-3"/></svg></span>
+          <span class="tile-icon" aria-hidden="true"><svg id="Ebene_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 40 40">
+  
+  <path d="M40,14.666v-1.333c0-4.418-3.582-8-8-8h-10.667c-4.418,0-8,3.582-8,8v1.333c0,4.418,3.582,8,8,8h9.025l6.371,3.185c1.223.611,2.464-.795,1.705-1.932l-1.817-2.727c2.121-1.497,3.383-3.931,3.383-6.527" style="fill: #fa9319;"/>
+  <path d="M18.667,14h-10.667C3.582,14,0,17.582,0,22v1.333c0,2.596,1.261,5.03,3.383,6.527l-1.817,2.727c-.759,1.137.483,2.544,1.705,1.932l6.371-3.185h9.025c4.418,0,8-3.582,8-8v-1.333c0-4.418-3.582-8-8-8" style="fill: #fae052;"/>
+  <g>
+    <circle cx="8" cy="22.666" r="1.333" style="fill: #000d6e;"/>
+    <circle cx="13.333" cy="22.666" r="1.333" style="fill: #000d6e;"/>
+    <circle cx="18.667" cy="22.666" r="1.333" style="fill: #000d6e;"/>
+  </g>
+</svg></span>
           <h3>Kontakt aufnehmen</h3>
           <p>Kontaktieren Sie uns für eine Beratung, eine Offerte oder bei anderen Anliegen.</p>
         </a>
 
         <a class="quick-tile quick-tile--red" href="https://www.helvetia.com/ch/web/de/privatkunden/kontakt.html">
-          <span class="quick-icon quick-icon--red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="5" width="16" height="10" rx="1"/><path d="M2 19h20"/><path d="M9 19l1-2h4l1 2"/></svg></span>
+          <span class="tile-icon" aria-hidden="true"><svg id="Ebene_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 40 40">
+  
+  <path d="M3.75,6.25h32.5c.69,0,1.25.56,1.25,1.25v21.25H2.5V7.5c0-.69.56-1.25,1.25-1.25" style="fill: #d9304c;"/>
+  <path d="M3.75,7.5h32.5v20H3.75V7.5Z" style="fill: #ffaca6;"/>
+  <path d="M0,30h40v1.25c0,1.381-1.119,2.5-2.5,2.5H2.5c-1.381,0-2.5-1.119-2.5-2.5v-1.25Z" style="fill: #d9304c;"/>
+  <path d="M16.25,30h7.5v2.5h-7.5v-2.5Z" style="fill: #000d6e;"/>
+</svg></span>
           <h3>Online-Services nutzen</h3>
           <p>Erledigen Sie Ihr Anliegen rund um die Uhr selber.</p>
         </a>
@@ -345,13 +399,35 @@ footer[data-section="footer"] { background: var(--color-primary); color: #fff; p
       <div class="quick-grid quick-grid--2">
         
         <a class="quick-tile" href="https://ebanking.baloise.ch/">
-          <span class="quick-icon quick-icon--plain"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 10l9-6 9 6"/><path d="M5 10v9M9.5 10v9M14.5 10v9M19 10v9"/><path d="M3 19h18"/></svg></span>
+          <span class="tile-icon" aria-hidden="true"><svg id="Ebene_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 40 40">
+  
+  <path d="M3.636,24.838V5.448h31.509v14.266l1.212-.2V5.448c0-.669-.543-1.212-1.212-1.212H3.636c-.669,0-1.212.543-1.212,1.212v20.602h14.603l-.2-1.212H3.636ZM15.754,29.686v-2.424H0v1.212c0,1.339,1.085,2.424,2.424,2.424h15.403l-.201-1.212h-1.871Z" style="fill: #d9304c;"/>
+  <path d="M3.636,5.448v19.39h13.191l-.141-.852c-.109-.66.337-1.284.998-1.394h0s17.46-2.877,17.46-2.877V5.448H3.636ZM17.626,29.686l-.399-2.424h-1.472v2.424h1.871Z" style="fill: #ffaca6;"/>
+  <path d="M38.211,20.437c-.109-.66-.733-1.107-1.394-.997l-.461.075-1.212.2-17.46,2.879c-.66.109-1.108.732-.999,1.393h0s.141.852.141.852l.2,1.212.2,1.212.4,2.424.199,1.212.635,3.85c.108.661.731,1.108,1.392,1,0,0,.001,0,.002,0l19.131-3.156c.66-.109,1.108-.732.999-1.393,0,0,0,0,0,0l-1.773-10.761ZM32.82,23.778c-.089-.063-.111-.186-.049-.275,0-.001.002-.002.003-.004l1.804-2.458c.066-.092.194-.113.286-.047l2.496,1.749c.089.063.111.186.049.275,0,.001-.002.002-.003.004l-.49.667-1.985-1.39-.825,1.125,1.143.8.511-.697.843.59-1.001,1.363c-.066.092-.194.113-.286.047l-2.498-1.749ZM21.267,34.091c-.061.084-.16.133-.264.13-.064-.001-.125-.022-.177-.059-1.687-1.232-2.059-3.596-.833-5.286.103-.141.3-.171.441-.068.141.103.171.3.068.441-1.022,1.408-.711,3.378.694,4.404.141.102.173.299.071.44,0,0,0,0,0,.001M22.014,33.076c-.061.083-.16.131-.263.128-.064-.001-.125-.022-.177-.059-1.129-.821-1.379-2.401-.558-3.53h0c.103-.141.3-.172.441-.069.141.103.171.3.068.441-.616.846-.43,2.03.416,2.646,0,0,.002.001.002.002.141.102.173.299.071.44,0,0,0,0,0,.001M22.755,32.057c-.061.083-.16.131-.263.128-.063-.002-.125-.023-.177-.059-.564-.412-.689-1.203-.279-1.769.097-.144.293-.182.437-.085.144.097.182.293.085.437-.004.006-.009.013-.014.019-.206.284-.143.681.14.887h0c.141.102.173.299.071.44,0,0-.001.002-.002.002" style="fill: #000d6e;"/>
+  <path d="M35.604,25.478l1.001-1.362-.843-.59-.511.697-1.143-.8.824-1.125,1.987,1.39.488-.667c.065-.088.046-.212-.042-.276-.001,0-.002-.002-.004-.003l-2.496-1.749c-.092-.065-.22-.044-.286.047l-1.804,2.458c-.065.088-.046.212.042.276.001,0,.002.002.004.003l2.496,1.749c.093.066.221.044.287-.048M20.504,29.247c.102-.141.071-.338-.07-.441-.141-.102-.338-.071-.441.07-1.227,1.69-.854,4.055.833,5.286.052.037.113.058.177.059.174.006.319-.131.325-.305.003-.105-.046-.205-.131-.266-1.405-1.026-1.715-2.996-.693-4.404" style="fill: #ffaca6;"/>
+  <path d="M21.187,31.397c-.08-.497.042-1.005.339-1.411.097-.144.059-.34-.085-.437-.137-.092-.322-.063-.424.067-.82,1.129-.571,2.708.557,3.529.051.037.112.059.176.061.174.006.319-.131.325-.305.003-.105-.046-.205-.131-.266-.408-.294-.681-.74-.757-1.237" style="fill: #ffaca6;"/>
+  <path d="M22.546,30.728c.103-.141.072-.338-.068-.441-.141-.103-.338-.072-.441.068-.41.566-.286,1.357.279,1.769.052.037.113.058.177.061.174.005.319-.133.323-.307.003-.104-.046-.202-.129-.263-.284-.206-.347-.603-.142-.887,0,0,0,0,.001-.001" style="fill: #ffaca6;"/>
+</svg></span>
           <h3>E-Banking</h3>
           <p>Erledigen Sie Ihre Bankgeschäfte einfach und bequem – wo und wann immer Sie möchten.</p>
         </a>
 
         <a class="quick-tile" href="https://www.helvetia.com/ch/web/de/privatkunden/kontakt/myhelvetia/kundenportal.html">
-          <span class="quick-icon quick-icon--plain"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 9h16"/><circle cx="8" cy="6.5" r="0.6" fill="currentColor" stroke="none"/></svg></span>
+          <span class="tile-icon" aria-hidden="true"><svg id="Ebene_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 40 40">
+  
+  <g id="Icon_Red">
+    <path d="M36.571,1.714H6.857c-.631,0-1.143.512-1.143,1.143v12.245h4.95c1.051,0,1.907.855,1.907,1.907v5.277h25.143V2.857c0-.631-.512-1.143-1.143-1.143Z" style="fill: #d9304c;"/>
+    <path d="M6.857,2.837v12.265h3.808c1.051,0,1.907.855,1.907,1.907v4.114h24V2.837H6.857Z" style="fill: #ffaca6;"/>
+    <path d="M0,35.837v1.612c0,.463.375.837.837.837h9.754c.463,0,.837-.375.837-.837v-1.612H0Z" style="fill: #d9304c;"/>
+    <rect y="18.694" width="11.429" height="17.143" style="fill: #ffaca6;"/>
+    <path d="M10.665,16.245H.764c-.422,0-.764.342-.764.764v1.685h11.429v-1.685c0-.422-.342-.764-.764-.764Z" style="fill: #fff;"/>
+    <path d="M10.665,16.245H.764c-.422,0-.764.342-.764.764v1.685h11.429v-1.685c0-.422-.342-.764-.764-.764ZM7.755,17.878H3.673c-.225,0-.408-.183-.408-.408s.183-.408.408-.408h4.082c.225,0,.408.183.408.408s-.183.408-.408.408ZM9.378,17.878c-.225,0-.408-.183-.408-.408s.183-.408.408-.408.408.183.408.408-.183.408-.408.408Z" style="fill: #d9304c;"/>
+    <circle cx="9.378" cy="17.469" r=".408" style="fill: #ffaca6;"/>
+    <circle cx="5.714" cy="35.837" r=".816" style="fill: #000d6e;"/>
+    <rect x="18.286" y="23.408" width="6.857" height="2.286" style="fill: #ffaca6;"/>
+    <path d="M25.143,23.429v2.286h-6.857v-2.286h-5.541v3.429h24.969c1.262,0,2.286-1.023,2.286-2.286v-1.143h-14.857Z" style="fill: #d9304c;"/>
+  </g>
+</svg></span>
           <h3>Kundenportal</h3>
           <p>Auf myHelvetia und myBaloise haben Sie Ihre Versicherungsunterlagen immer im Griff.</p>
         </a>
@@ -398,28 +474,55 @@ footer[data-section="footer"] { background: var(--color-primary); color: #fff; p
         <div class="carousel-track" data-carousel="service" tabindex="0" role="region" aria-label="Versicherungskategorien, horizontal scrollbar">
           
         <article class="service-card">
-          <span class="icon-badge icon-badge--purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 13l1.5-4.5A2 2 0 0 1 6.4 7h11.2a2 2 0 0 1 1.9 1.5L21 13"/><rect x="3" y="13" width="18" height="5" rx="1.5"/><circle cx="7.5" cy="18.5" r="1.5"/><circle cx="16.5" cy="18.5" r="1.5"/></svg></span>
+          <span class="tile-icon" aria-hidden="true"><svg id="Ebene_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 40 40">
+  
+  <path d="M30,31.429h7.143v4.286c0,.789-.64,1.429-1.429,1.429h-4.286c-.789,0-1.429-.64-1.429-1.429v-4.286ZM2.857,31.429h7.143v4.286c0,.789-.64,1.429-1.429,1.429h-4.286c-.789,0-1.429-.64-1.429-1.429v-4.286Z" style="fill: #000d6e;"/>
+  <rect x="35.714" y="11.429" width="4.286" height="2.857" rx=".5" ry=".5" style="fill: #6c2273;"/>
+  <rect y="11.429" width="4.286" height="2.857" rx=".5" ry=".5" style="fill: #6c2273;"/>
+  <path d="M36.7,20l-1.429-4.286H4.757l-1.429,4.286c-.305.694-.466,1.442-.471,2.2v7.8h34.286v-7.8c.003-.756-.148-1.504-.443-2.2M7.857,25.714c-1.183,0-2.143-.959-2.143-2.143s.959-2.143,2.143-2.143,2.143.959,2.143,2.143-.959,2.143-2.143,2.143M32.143,25.714c-1.183,0-2.143-.959-2.143-2.143s.959-2.143,2.143-2.143,2.143.959,2.143,2.143-.959,2.143-2.143,2.143" style="fill: #6c2273;"/>
+  <path d="M31.1,5.5c-.664-1.6-2.225-2.642-3.957-2.643h-14.286c-1.732,0-3.293,1.043-3.957,2.643l-3.657,8.786h29.514l-3.657-8.786Z" style="fill: #b8b2ff;"/>
+</svg></span>
           <h3>Autoversicherung</h3>
           <p>Maximale Sicherheit für Ihr Auto</p>
           <a class="card-link" href="https://www.helvetia.com/ch/web/de/privatkunden/versicherungen/autoversicherung.html">Autoversicherung ansehen</a>
         </article>
 
         <article class="service-card">
-          <span class="icon-badge icon-badge--green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9h12v-9"/><path d="M10 19v-5h4v5"/></svg></span>
+          <span class="tile-icon" aria-hidden="true"><svg id="Ebene_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 40 40">
+  
+  <path d="M8.75,15.625v3.75h22.5v-3.75c0-1.381,1.119-2.5,2.5-2.5h2.5v-5c0-2.071-1.679-3.75-3.75-3.75H7.5c-2.071,0-3.75,1.679-3.75,3.75v5h2.5c1.381,0,2.5,1.119,2.5,2.5" style="fill: #d9304c;"/>
+  <path d="M5,31.875v2.5c0,.69.56,1.25,1.25,1.25s1.25-.56,1.25-1.25v-2.5h-2.5ZM32.5,31.875v2.5c0,.69.56,1.25,1.25,1.25s1.25-.56,1.25-1.25v-2.5h-2.5Z" style="fill: #000d6e;"/>
+  <path d="M40,31.875V15.625c0-.69-.56-1.25-1.25-1.25h-5c-.69,0-1.25.56-1.25,1.25v5H7.5v-5c0-.69-.56-1.25-1.25-1.25H1.25c-.69,0-1.25.56-1.25,1.25v16.25h40Z" style="fill: #ffaca6;"/>
+</svg></span>
           <h3>Hausratversicherung</h3>
           <p>Rundum-Schutz für Ihr Hab und Gut</p>
           <a class="card-link" href="https://www.helvetia.com/ch/web/de/privatkunden/versicherungen/hausratversicherung.html">Hausratversicherung ansehen</a>
         </article>
 
         <article class="service-card">
-          <span class="icon-badge icon-badge--red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/></svg></span>
+          <span class="tile-icon" aria-hidden="true"><svg id="Ebene_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 40 40">
+  
+  <path d="M27.049,9.769h3.188v4.014l1.19,1.339V0h-3.204l1.433,7.197-2.607,2.571ZM0,21.429h14.285v18.571H0v-18.571ZM17.142,21.429h14.285v18.571h-14.285v-18.571ZM0,0h14.285v18.571H0V0Z" style="fill: #fa9319;"/>
+  <path d="M28.809,14.326v-3.128h-3.9l-1.657-3.426-3.243,1.729-2.867-1.433v10.504h14.285v-1.3l-2.618-2.946Z" style="fill: #fa9319;"/>
+  <path d="M19.988,7.893l3.903-2.081,1.659,3.43,2.556-2.521L26.768,0h-9.625v6.47l2.846,1.423Z" style="fill: #fa9319;"/>
+  <path d="M24.228,18.217c-.895,1.382-1.372,2.993-1.371,4.64,0,1.521.4,2.948,1.096,4.186,1.102-1.268,1.709-2.891,1.71-4.571,0-1.439-.54-2.987-1.434-4.254M38.929,27c.702-1.268,1.07-2.693,1.071-4.143,0-1.627-.466-3.22-1.343-4.59-.803,1.167-1.43,2.666-1.43,4.171,0,1.701.62,3.307,1.701,4.561" style="fill: #000d6e;"/>
+  <path d="M35.799,22.437c0-1.796.743-3.771,1.95-5.354-3.17-3.491-8.57-3.752-12.061-.582-.194.176-.38.361-.557.555,1.211,1.564,1.96,3.561,1.96,5.416,0,2.19-.843,4.246-2.311,5.793,1.626,2.003,4.069,3.166,6.648,3.164,2.597,0,5.054-1.179,6.678-3.206-1.482-1.562-2.308-3.633-2.307-5.786" style="fill: #000d6e;"/>
+  <path d="M27.09,22.471c0-1.854-.749-3.851-1.96-5.414-.334.36-.636.748-.903,1.16.894,1.267,1.434,2.816,1.434,4.254,0,1.68-.608,3.303-1.71,4.571.242.432.518.839.829,1.221,1.485-1.563,2.312-3.637,2.31-5.793M38.106,28.223c.309-.382.583-.789.823-1.223-1.097-1.267-1.701-2.887-1.701-4.563,0-1.504.629-3.003,1.43-4.171-.268-.42-.572-.816-.909-1.183-1.206,1.583-1.95,3.557-1.95,5.354,0,2.153.825,4.224,2.307,5.786" style="fill: #fae052;"/>
+</svg></span>
           <h3>Privathaftpflicht</h3>
           <p>Gelassen bleiben auch wenn mal etwas schiefgeht</p>
           <a class="card-link" href="https://www.helvetia.com/ch/web/de/privatkunden/versicherungen/privathaftpflicht.html">Privathaftpflicht ansehen</a>
         </article>
 
         <article class="service-card">
-          <span class="icon-badge icon-badge--yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10.5 21l1.2-5.6L21 9.8c.9-.5.9-1.9-.1-2.3-.5-.2-1-.1-1.5.1l-6.6 3.4L7.2 8.4l-2 .6 2.9 4.3-3.9 2 .3 1.8 3.9-1 .7 4.4 1.4-.5z"/></svg></span>
+          <span class="tile-icon" aria-hidden="true"><svg id="Ebene_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 40 40">
+  
+  <path d="M5.886,4.685l-3.925,3.923,13.271,8.311,8.998-8.997L5.886,4.685Z" style="fill: #1b5951;"/>
+  <path d="M10.761,21.391l-8.31-.52-2.451,2.453,6.805,3.255c.204-1.003.698-1.925,1.421-2.65l2.536-2.537Z" style="fill: #000d6e;"/>
+  <path d="M31.392,38.039l3.923-3.925-3.238-18.344-8.997,8.998,8.311,13.271Z" style="fill: #1b5951;"/>
+  <path d="M13.425,33.201l3.252,6.798,2.453-2.451-.519-8.31-2.537,2.537c-.726.722-1.646,1.218-2.648,1.426" style="fill: #000d6e;"/>
+  <path d="M9.319,30.682c-1.625-1.564-1.675-4.148-.112-5.774L32.976,1.139c1.625-1.561,4.208-1.511,5.771.112,1.625,1.563,1.676,4.147.114,5.773L15.092,30.795c-1.626,1.562-4.21,1.511-5.773-.114" style="fill: #94e3d4;"/>
+</svg></span>
           <h3>Reiseversicherung</h3>
           <p>Entspannt die Ferien geniessen</p>
           <a class="card-link" href="https://www.helvetia.com/ch/web/de/privatkunden/versicherungen/reiseversicherung.html">Reiseversicherung ansehen</a>
@@ -456,9 +559,66 @@ footer[data-section="footer"] { background: var(--color-primary); color: #fff; p
       </div>
       <div class="contact-band-secondary">
         <h3>Wir sind für Sie da.</h3>
-        <a href="https://www.helvetia.com/ch/web/de/privatkunden/kontakt/schaden-melden.html">Schaden melden – Zur Schadenmeldung</a>
-        <a href="https://www.helvetia.com/ch/web/de/privatkunden/kontakt.html">Schreiben Sie uns – Zum Kontaktformular</a>
-        <a href="https://www.helvetia.com/ch/web/de/privatkunden/kontakt/beratung/agenturen.html">Agentur finden – Zur Karte</a>
+        <a href="https://www.helvetia.com/ch/web/de/privatkunden/kontakt/schaden-melden.html"><span class="tile-icon tile-icon--sm" aria-hidden="true"><svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 425.2 425.2" style="enable-background:new 0 0 425.2 425.2;" xml:space="preserve">
+<g id="Hilfslinien">
+</g>
+<g id="Icon">
+	<g>
+		<path d="M150.7,425.2c-0.9,0-1.9-0.1-2.8-0.5c-4-1.3-6.4-5.1-6-9.4l12.7-136.9l-100.4,21c-4,0.9-8.1-1.2-9.9-4.7
+			c-1.8-3.6-1-8.1,2.1-10.8l77.5-68.4l-88.7-42c-3.7-1.8-5.8-5.9-4.9-10s4.4-7,8.6-7l114.7-2.4l-32.4-88.2
+			c-1.4-3.7-0.1-7.9,3.1-10.3c3.2-2.3,7.6-2.4,10.8,0l81.9,60.2l74.5-92.9c2.6-3.2,6.9-4.2,10.6-2.6c3.7,1.7,5.9,5.6,5.3,9.6
+			l-19.9,121.4l85.2-6.9c3.8-0.3,7.7,2.1,9.1,5.9c1.4,3.7,0.1,8.1-3.2,10.4l-79.2,57.2l93.8,129l0,0c1.8,2.2,2.6,4.7,1.3,8.3
+			c-1.2,3.1-4,5.4-7.2,5.8c-2.3,0.3-4.7-0.3-6.7-1.7c-3.5-2.2-28.3-16.8-52.5-30.9c-47.5-27.8-70.9-41.5-82.4-48.8L158.3,421
+			C156.7,423.7,153.8,425.2,150.7,425.2z M164.5,258.3c2.2,0,4.4,0.8,6,2.3c2.2,1.9,3.2,4.7,2.9,7.6L163.1,379L235,262.5
+			c1.9-3.1,5.6-4.7,9.2-4.1c1.5,0.3,2.9,1,4.1,1.9c5.4,3.7,53.4,31.8,88.7,52.4c5.5,3.2,11,6.4,16.1,9.5L279.5,221
+			c-1.4-1.9-2.1-4.4-1.5-6.7c0.4-2.3,1.7-4.5,3.6-5.9l60.4-43.6l-64.7,5.3c-2.7,0.3-5.4-0.9-7.3-2.8c-1.8-2.1-2.7-4.7-2.2-7.6
+			l16.1-99.2l-58.6,73c-2.9,3.7-8.5,4.5-12.3,1.7l-65-47.8l26.3,72c1,2.7,0.6,5.8-1,8.2c-1.7,2.4-4.4,3.8-7.2,4l-89.1,2l66.6,31.8
+			c2.7,1.3,4.6,3.8,5,6.8s-0.6,6-2.9,7.9l-62.3,55l79.1-16.5C163.3,258.5,163.9,258.3,164.5,258.3z M273,381c-4,0-7.6-2.6-8.6-6.5
+			l-8.1-28.8c-1.4-4.7,1.4-9.7,6.2-11c4.7-1.3,9.7,1.4,11,6.3l8.1,28.8c1.3,4.7-1.4,9.7-6.3,11C274.5,380.9,273.7,381,273,381z
+			 M71.6,362.8c-2.4,0-4.7-0.9-6.5-2.8c-3.3-3.6-3.2-9.4,0.4-12.7L89,325.1c3.6-3.5,9.4-3.2,12.7,0.4c3.5,3.6,3.2,9.4-0.4,12.7
+			l-23.5,22.2C76,362,73.8,362.8,71.6,362.8z M339.3,111.9c-2.4,0-4.7-0.9-6.5-2.8c-3.3-3.6-3.2-9.2,0.4-12.7l21.5-20.1
+			c3.6-3.3,9.4-3.2,12.7,0.4c3.3,3.6,3.2,9.2-0.4,12.7l-21.5,20.1C343.7,111.1,341.5,111.9,339.3,111.9z M57.5,99.1
+			c-1.9,0-4-0.6-5.6-1.9L35.1,83.7c-3.8-3.1-4.5-8.7-1.4-12.6c3.1-3.8,8.7-4.5,12.6-1.4l16.9,13.5c3.8,3.1,4.5,8.7,1.4,12.6
+			C62.8,97.9,60.2,99.1,57.5,99.1z M213.2,43.4c-0.1,0-0.1,0-0.3,0c-5-0.1-8.8-4.2-8.7-9.2l0.6-25.5c0.1-5,4.1-9,9.2-8.7
+			c5,0.1,8.8,4.2,8.7,9.2l-0.6,25.5C222.1,39.6,218.1,43.4,213.2,43.4z"/>
+	</g>
+</g>
+</svg></span><span><strong>Schaden melden</strong><br>Zur Schadenmeldung</span></a>
+        <a href="https://www.helvetia.com/ch/web/de/privatkunden/kontakt.html"><span class="tile-icon tile-icon--sm" aria-hidden="true"><svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 425.2 425.2" style="enable-background:new 0 0 425.2 425.2;" xml:space="preserve">
+<g id="Hilfslinien">
+</g>
+<g id="Icon">
+	<g>
+		<path d="M423.6,80.4c0-0.6-0.3-1.1-0.3-1.6c-0.2-0.8-0.2-1.6-0.5-2.2c-0.3-0.8-0.8-1.4-1.3-2c-0.3-0.5-0.5-0.9-0.8-1.3
+			c-0.2-0.2-0.2-0.2-0.3-0.3c-0.6-0.6-1.3-1.1-1.9-1.4c-0.5-0.3-0.9-0.8-1.6-1.1c-0.6-0.3-1.3-0.3-1.9-0.5c-0.8-0.2-1.6-0.5-2.3-0.5
+			c-0.2,0-0.3,0-0.3,0H11.2c-0.2,0-0.2,0-0.3,0c-0.8,0-1.6,0.3-2.3,0.5c-0.6,0.2-1.3,0.2-1.9,0.5S5.4,71.3,5,71.8
+			c-0.6,0.3-1.3,0.6-1.7,1.1c0,0,0,0.2-0.2,0.2l-0.2,0.2c-0.5,0.5-0.6,1.1-0.9,1.6c-0.5,0.6-0.9,1.3-1.1,1.9
+			c-0.3,0.8-0.3,1.6-0.5,2.3c-0.2,0.6-0.3,1.1-0.3,1.7l1.6,264.1c0,6.1,5,10.9,11.1,10.9h401.3c3,0,5.8-1.1,7.8-3.3
+			c2-2,3.3-5,3.3-7.8L423.6,80.4z M382.7,91.5L206.3,244.1L39.7,91.5H382.7z M23.7,333.6l-1.3-227.8l176.4,161.3c2,1.9,4.8,3,7.5,3
+			s5.2-0.9,7.2-2.7l188.1-162.8l1.3,228.9H23.7V333.6z"/>
+	</g>
+</g>
+</svg></span><span><strong>Schreiben Sie uns</strong><br>Zum Kontaktformular</span></a>
+        <a href="https://www.helvetia.com/ch/web/de/privatkunden/kontakt/beratung/agenturen.html"><span class="tile-icon tile-icon--sm" aria-hidden="true"><svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 425.2 425.2" style="enable-background:new 0 0 425.2 425.2;" xml:space="preserve">
+<g id="Hilfslinien">
+</g>
+<g id="Icon">
+	<g>
+		<path d="M212.5,191.6c-30.4,0-55.2-24.7-55.2-55.2c0-30.4,24.7-55.2,55.2-55.2c30.4,0,55.2,24.7,55.2,55.2
+			S242.9,191.6,212.5,191.6z M212.5,101.7c-19.2,0-34.8,15.6-34.8,34.8s15.6,34.8,34.8,34.8s34.7-15.6,34.7-34.8
+			C247.3,117.4,231.7,101.7,212.5,101.7z"/>
+		<path d="M212.5,425c-0.9,0-2.1-0.2-3.1-0.5l0,0c-3.1-0.8-6.1-2.1-8.9-3.8l-0.8-0.5c-9.1-5.4-17-12.7-22.7-21.5
+			c-40.2-60.6-76.9-147.4-100.6-209.6c-5.8-15.5-8.7-31.8-8.7-48.5C67.7,63.1,132.7,0,212.8,0c79.9,0,145.1,63.1,145.1,140.7
+			c0,16.6-2.9,32.8-8.7,48.3c-23.8,62.1-60.5,149-100.6,209.6c-5.8,8.7-13.7,16.3-23,21.6l-0.9,0.5c-2.6,1.5-5.4,2.6-8.1,3.5
+			C214.9,424.8,213.4,425,212.5,425z M212.5,23.2C145.1,23.2,90.4,76,90.4,140.9c0,13.8,2.5,27.3,7.4,40.2
+			c23.3,61.1,59.4,146.2,98.3,205c3.8,5.8,9.2,10.9,15.5,14.6l0.9,0.5c0,0,0,0,0.2,0l0,0l0.9-0.6c6.3-3.7,11.5-8.6,15.5-14.6
+			c39-58.9,75-144.1,98.3-205.1c4.9-12.9,7.4-26.4,7.4-40.2C334.6,75.9,279.8,23.2,212.5,23.2z"/>
+	</g>
+</g>
+</svg></span><span><strong>Agentur finden</strong><br>Zur Karte</span></a>
       </div>
     </div>
   </section>
@@ -529,21 +689,52 @@ footer[data-section="footer"] { background: var(--color-primary); color: #fff; p
       <div class="stat-grid">
         
         <div class="stat-tile stat-tile--purple">
+          <span class="tile-icon tile-icon--sm" aria-hidden="true"><svg id="Ebene_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 40 40">
+  
+  <path d="M25.472,24.971c-.437-1.257-1.43-2.241-2.691-2.667-3.548-1.219-6.178-1.569-9.339-1.677-3.161.109-5.792.459-9.339,1.677-1.261.426-2.254,1.41-2.691,2.667l-1.412,10.655h26.884l-1.412-10.655Z" style="fill: #6c2273;"/>
+  <path d="M18.474,11.566c.06-.217.121-.434.157-.652.048-.133.072-.326.084-.543.036-.495.024-1.134-.036-1.617-.024-.157-.048-.29-.06-.41-.253-1.11-2.112-3.958-5.213-3.958s-5.152,2.437-5.189,4.682c-.072.591-.084,1.569.217,2.51-.422.169-.724.712-.724,1.376,0,.784.446,1.436,1.002,1.436.06,0,.121-.012.181-.036.302,1.484,1.014,2.751,1.967,3.572-.097,1.05-.362,2.353-.808,2.799l-.229.229,1.17.941,2.474,1.991,2.413-1.943,1.231-.989-.229-.217c-.446-.434-.7-1.725-.808-2.775.977-.821,1.689-2.1,1.991-3.584.048,0,.097.024.157.024.555,0,1.002-.652,1.002-1.436,0-.652-.302-1.183-.712-1.363l-.036-.036Z" style="fill: #b8b2ff;"/>
+  <path d="M18.679,8.742c-.024-.157-.048-.29-.06-.41-.253-1.11-2.112-3.958-5.213-3.958s-5.152,2.437-5.189,4.682c-.084.676-.109,1.822.338,2.86.097.241.229.483.386.7l.41-2.715c.265.097.579.169.929.169,1.774,0,3.161-.808,4.271-1.846.398.627,1.11,1.243,2.039,1.677.302.145.603.241.905.326.036.024.06.06.097.072.133.097.41,2.305.41,2.305.157-.217.278-.459.386-.7.133-.314.217-.652.265-1.002.048-.133.072-.326.084-.543.036-.495.024-1.134-.036-1.617h-.024Z" style="fill: #000d6e;"/>
+  <path d="M38.6,26.021c-.437-1.257-1.43-2.241-2.691-2.667-3.548-1.219-6.178-1.569-9.339-1.677-3.161.109-5.792.459-9.339,1.677-1.261.426-2.254,1.41-2.691,2.667l-1.412,9.605h26.872l-1.412-9.605h.012Z" style="fill: #6c2273;"/>
+  <path d="M31.602,12.603c.06-.217.121-.434.157-.652.048-.133.072-.326.084-.543.036-.495.024-1.134-.036-1.617-.024-.157-.048-.29-.06-.41-.253-1.11-2.112-3.958-5.213-3.958s-5.152,2.437-5.189,4.682c-.072.591-.084,1.569.217,2.51-.422.169-.724.712-.724,1.376,0,.784.446,1.436,1.002,1.436.06,0,.121-.012.181-.036.302,1.484,1.014,2.751,1.967,3.572-.097,1.05-.362,2.353-.808,2.799l-.229.229,1.17.941,2.474,1.991,2.413-1.943,1.231-.989-.229-.217c-.446-.434-.7-1.725-.808-2.775.977-.821,1.689-2.1,1.991-3.584.048,0,.097.024.157.024.555,0,1.002-.652,1.002-1.436,0-.652-.302-1.183-.712-1.363l-.036-.036Z" style="fill: #b8b2ff;"/>
+  <path d="M31.795,9.78c-.024-.157-.048-.29-.06-.41-.253-1.11-2.112-3.958-5.213-3.958s-5.152,2.437-5.189,4.682c-.084.676-.109,1.822.338,2.86.097.241.229.483.386.7l.41-2.715c.265.097.579.169.929.169,1.774,0,3.161-.808,4.271-1.846.398.627,1.11,1.243,2.039,1.677.302.145.603.241.905.326.036.024.06.06.097.072.133.097.41,2.305.41,2.305.157-.217.278-.459.386-.7.133-.314.217-.652.265-1.002.048-.133.072-.326.084-.543.036-.495.024-1.134-.036-1.617h-.024ZM15.928,22.087c.241.084.519.145.845.145.929,0,1.738-.241,2.462-.615.808-.422,1.508-1.026,2.087-1.665.386.893,1.231,1.894,2.087,2.498.048.036.121.362.181.736.097.579.193,1.291.193,1.291.133-.169.217-.362.314-.555,0-.024.024-.036.036-.06.845-1.979-.193-4.959-1.882-4.754-.326-.422-1.46-1.074-2.51-1.074s-2.232.941-2.884.941c-.422,0-1.17-.145-1.569-.748-.205.603-.121,1.207.253,1.436-.483.338-1.026.097-1.351-.181,0,0,.097,1.062.724,1.87-.072.579-.097,1.605.302,2.522,0,.012.024.024.024.048.084.193.193.398.326.579l.374-2.389-.012-.024Z" style="fill: #000d6e;"/>
+  <path d="M27.451,35.626v-1.967c0-.507-.169-.989-.507-1.376-.543-.603-1.376-.869-2.124-1.122-.048-.012-.109-.024-.157-.048-.036,0-.072-.024-.109-.024l-.217-.06c-.205-.06-.41-.109-.64-.169-.048-.012-.097-.024-.157-.036-.036,0-.084-.024-.121-.036-.133-.024-.265-.06-.398-.097-.145-.036-.278-.06-.422-.097-.036,0-.072-.012-.109-.024-.048,0-.084-.024-.133-.036-.193-.048-.386-.084-.567-.121h-.048c0-.157-.012-.434-.024-.543l-.036-1.038c.205-.133.398-.278.591-.434.459-.386.833-.881,1.122-1.436.097-.181.193-.362.265-.555.097.048.205.084.314.097.181,0,.338-.097.483-.217.253-.229.434-.627.434-1.086,0-.374-.121-.712-.302-.953-.119-.164-.296-.276-.495-.314-.084.193-.181.386-.314.555v-.169c0-.036-.012-.097-.024-.145,0-.06-.012-.109-.024-.181-.036-.241-.084-.531-.133-.808-.06-.374-.133-.7-.181-.736-.845-.603-1.689-1.605-2.087-2.498-.579.64-1.279,1.243-2.087,1.665-.338.181-.7.314-1.074.422-.205.06-.422.109-.64.133h-.036c-.229.036-.471.048-.712.048-.326,0-.591-.06-.845-.145l-.374,2.389c-.133-.181-.229-.374-.326-.579-.471.06-.833.603-.833,1.279,0,.446.169.808.398,1.05.145.145.314.253.519.253.121,0,.229-.036.338-.109.084.241.193.471.314.688,0,.012.012.024.024.048s.036.048.048.072c.386.664.905,1.207,1.52,1.593l-.06.965c-.012.181-.048.652-.06.652h-.048c-.181.036-.374.072-.567.121-.048,0-.084.024-.133.036-.036,0-.072.012-.109.024-.145.036-.278.06-.422.097-.133.036-.265.072-.398.097-.048,0-.084.024-.121.036-.048.012-.097.024-.157.036-.217.06-.434.109-.64.169l-.217.06s-.072.024-.109.024c-.048.012-.109.024-.157.048-.748.253-1.581.519-2.124,1.122-.338.374-.507.869-.507,1.376v1.967h15.722l-.012.036Z" style="fill: #b8b2ff;"/>
+  <path d="M24.555,35.626v-4.561l-.217-.06c-.205-.06-.41-.109-.64-.169-.048-.012-.097-.024-.157-.036-.036,0-.084-.024-.121-.036-.133-.024-.265-.06-.398-.097-.145-.036-.278-.06-.422-.097-.036,0-.072-.012-.109-.024-.048,0-.084-.024-.133-.036-.193-.048-.386-.084-.567-.121h-.048c-.169.241-.386.446-.627.615-.434.314-.953.507-1.52.507s-1.098-.193-1.52-.507c-.241-.181-.459-.374-.627-.615h-.048c-.181.036-.374.072-.567.121-.048,0-.084.024-.133.036-.036,0-.072.012-.109.024-.145.036-.278.06-.422.097-.133.036-.265.072-.398.097-.048,0-.084.024-.121.036-.048.012-.097.024-.157.036-.217.06-.434.109-.64.169l-.217.06v4.561h9.931-.012Z" style="fill: #6c2273;"/>
+</svg></span>
           <strong>2 Mio.+</strong>
           <span>Kundinnen und Kunden vertrauen uns in der Schweiz</span>
         </div>
 
         <div class="stat-tile stat-tile--red">
+          <span class="tile-icon tile-icon--sm" aria-hidden="true"><svg id="Ebene_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 40 40">
+  
+  <path d="M28.077,1.404C22.855-.468,17.144-.468,11.922,1.404L2.857,4.661v18.076c0,8.714,10.847,17.25,17.145,17.263,6.295-.013,17.141-8.549,17.141-17.264V4.661l-9.066-3.257Z" style="fill: #ffaca6;"/>
+  <path d="M18.461,25.811c.015.015.034.018.048.032.013.011.017.029.03.04.097.087.211.134.321.194.062.033.114.083.179.109.197.077.402.12.609.12.222,0,.442-.048.65-.136.074-.032.134-.093.203-.135.111-.067.23-.12.326-.216.013-.013.016-.03.029-.042.014-.014.032-.018.046-.033l8.331-9.405c.613-.692.55-1.75-.142-2.365-.691-.614-1.749-.551-2.362.14,0,0,0,0,0,0l-7.147,8.069-3.459-3.487c-.651-.655-1.711-.659-2.366-.008,0,0,0,0,0,0-.656.65-.661,1.71-.011,2.366,0,0,0,0,0,0l4.715,4.754Z" style="fill: #000d6e;"/>
+</svg></span>
           <strong>165+</strong>
           <span>Jahre Versicherungskompetenz seit 1858</span>
         </div>
 
         <div class="stat-tile stat-tile--green">
+          <span class="tile-icon tile-icon--sm" aria-hidden="true"><svg id="Ebene_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 40 40">
+  
+  <g id="Icon_Green">
+    <path d="M9.827,16.383c2.769,7.196,9.709,17.321,10.172,17.992.463-.672,7.403-10.796,10.172-17.992,2.652-5.733.248-12.575-5.37-15.282-5.618-2.707-12.322-.253-14.974,5.48-1.436,3.103-1.436,6.699,0,9.802" style="fill: #94e3d4;"/>
+    <rect x="8.75" y="37.5" width="22.5" height="2.5" style="fill: #1b5951;"/>
+    <path d="M20,16.25c2.761,0,5-2.239,5-5s-2.239-5-5-5-5,2.239-5,5,2.239,5,5,5h0" style="fill: #000d6e;"/>
+  </g>
+</svg></span>
           <strong>150+</strong>
           <span>Standorte in der Schweiz, auch in Ihrer Nähe</span>
         </div>
 
         <div class="stat-tile stat-tile--yellow">
+          <span class="tile-icon tile-icon--sm" aria-hidden="true"><svg id="Ebene_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 40 40">
+  
+  <path d="M20.88,32.311l.016-.211c-1.714,1.85-4.602,1.96-6.452.246-.085-.079-.167-.161-.246-.246l.013.172c.033.418.072.85.116,1.296.108,2.178.468,4.337,1.073,6.432h4.292c.605-2.096.965-4.254,1.073-6.433.045-.433.081-.849.114-1.257" style="fill: #000d6e;"/>
+  <path d="M14.147,31.355c.016.244.033.492.052.746,1.714,1.85,4.602,1.96,6.452.246.085-.079.167-.161.246-.246.019-.253.036-.502.052-.744.102-1.592.123-3.189.061-4.784-.042-1.021-.109-1.594-.109-1.594l.012-1.597h-.959c-.456.904-1.558,1.267-2.462.811s-1.267-1.558-.811-2.462c.456-.904,1.558-1.267,2.462-.811.49.247.843.701.963,1.236h1.707c1.249-1.199,2.129-2.731,2.536-4.415-.429-.449-.669-1.045-.67-1.665v-3.117c.004-.405.108-.803.303-1.158l-.002-.058c-.058-.099-.125-.199-.19-.299-.398-.616-.898-1.161-1.478-1.61-1.342.577-2.852.625-4.228.135-.592-.195-1.164-.445-1.708-.748-.372-.205-.72-.452-1.036-.736-.878.146-1.737.393-2.558.736-.58.243-1.052.488-1.427.671-.11.434-.182.878-.216,1.324-.014.195-.022.391-.025.586.195.355.299.752.303,1.156v3.117c-.002.579-.21,1.139-.589,1.578.459,2.081,1.662,3.922,3.383,5.179h-.027l.011,2.146s-.067.573-.11,1.594c-.061,1.594-.04,3.19.063,4.782" style="fill: #fae052;"/>
+  <path d="M14.212,32.271l-.012-.172c-.02-.253-.037-.502-.053-.744-.102-1.592-.123-3.188-.061-4.782.042-1.021.109-1.594.109-1.594l-.157.078-10.544,5.329c-1.277.644-2.148,1.882-2.325,3.301l-.79,6.313h15.022c-.605-2.096-.965-4.254-1.073-6.433-.044-.432-.083-.864-.116-1.296M25.078,10.752c.043-.98.036-1.962-.02-2.942-.156-1.541-3.041-5.365-7.511-5.365s-7.511,3.372-7.511,6.438v1.88c.459.225.836.589,1.078,1.039.004-.202.009-.402.023-.585.034-.447.106-.89.216-1.324.375-.184.846-.429,1.427-.672.821-.343,1.68-.59,2.558-.736.317.284.664.53,1.036.736.544.303,1.116.553,1.708.748,1.376.49,2.886.442,4.228-.135.58.449,1.08.994,1.478,1.61.065.099.132.2.19.299l.002.058c.245-.457.629-.824,1.096-1.048M26.131,33.845c0-1.93.76-3.782,2.117-5.155l-7.348-3.712s.067.573.11,1.594c.061,1.594.04,3.19-.063,4.782-.016.244-.033.492-.052.746l-.016.21c-.033.408-.069.824-.114,1.257-.108,2.179-.468,4.337-1.073,6.433h9.775c-2.08-1.357-3.334-3.672-3.337-6.155" style="fill: #fa9319;"/>
+  <path d="M33.489,27.737c-3.386,0-6.131,2.745-6.131,6.131s2.745,6.131,6.131,6.131,6.131-2.745,6.131-6.131-2.745-6.131-6.131-6.131M37.168,34.59c0,.279-.226.505-.505.505h-1.947v1.947c0,.279-.226.505-.505.505h-1.442c-.279,0-.505-.226-.505-.505v-1.947h-1.947c-.279,0-.505-.226-.505-.505v-1.442c0-.279.226-.505.505-.505h1.947v-1.947c0-.279.226-.505.505-.505h1.442c.279,0,.505.226.505.505v1.947h1.947c.279,0,.505.226.505.505v1.442ZM11.416,12.958c-.013-1.349-1.104-2.439-2.453-2.453h-.607c0-.027-.006-.054-.006-.082,0-5.079,4.118-9.197,9.197-9.197s9.197,4.118,9.197,9.197c0,.028-.006.055-.006.082h-.607c-1.347.017-2.435,1.105-2.453,2.453v3.117c.001.62.241,1.217.67,1.665.318.341.726.585,1.177.703v.646c-.002,1.692-1.373,3.064-3.066,3.066h-2.354c-.219-.997-1.205-1.627-2.202-1.408-.997.219-1.627,1.205-1.408,2.202s1.205,1.627,2.202,1.408c.544-.12,1.005-.478,1.254-.976h2.507c2.369-.003,4.289-1.923,4.292-4.292v-.564c.674-.003,1.219-.55,1.22-1.224v-6.796h-.006c0-.028.006-.054.006-.082,0-5.757-4.667-10.423-10.423-10.423S7.124,4.667,7.124,10.423c0,.028.006.054.006.082h-.006v6.796c0,.677.549,1.226,1.226,1.226h.613c1.349-.013,2.439-1.104,2.453-2.453v-3.117Z" style="fill: #000d6e;"/>
+</svg></span>
           <strong>7’000+</strong>
           <span>Mitarbeitende in der Schweiz</span>
         </div>

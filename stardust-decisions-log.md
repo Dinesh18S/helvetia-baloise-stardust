@@ -5,6 +5,82 @@ up to date as work proceeds. Reverse-chronological.
 
 ---
 
+## 2026-08-10 — Invented icon set replaced with real DAM assets
+
+**What happened.** The service-tile and quick-access tile icons
+(pastel circular badges with hand-drawn line glyphs — car, calculator,
+headset, laptop, bank, portal, home, shield, plane) were authored from
+scratch during the earlier prototype render. This violated the
+project's hard no-invented-assets rule (`CLAUDE.md`): icons are a
+brand asset exactly like colors and typefaces, and none of that set
+was ever captured from the live site.
+
+**Fix — fetched real assets, same method as `logo.svg`.** Navigated
+the live page with Playwright, scrolled to trigger lazy-load, and read
+every `svg[use href]` target near each tile's heading text. This
+confirmed the live site uses **flat multicolour illustration SVGs**
+hosted on the Helvetia DAM
+(`/content/dam/os/ch/web/assets/graphics-and-icons/icons/*.svg`), not
+line-stroke glyphs — matched every icon to its tile by DOM order and
+downloaded all 17 real files to `stardust/prototypes/assets/icons/`:
+
+| tile | real asset |
+|---|---|
+| Schaden melden | car-full-crash-one-car-green.svg |
+| Prämie berechnen | calculator-purple.svg |
+| Kontakt aufnehmen | contact-tangerine.svg |
+| Online-Services nutzen | laptop-red.svg |
+| E-Banking | online-banking-red.svg |
+| Kundenportal | notebook-smartphone-red.svg |
+| Autoversicherung | car-purple.svg |
+| Hausratversicherung | couch-red.svg |
+| Privathaftpflicht | liability-tangerine-(1).svg |
+| Reiseversicherung | travel-insurance-for-air-travel-green.svg |
+| stat: Kundinnen/Kunden | gender-neutral-family_purple.svg |
+| stat: Jahre Kompetenz | warranty-red.svg |
+| stat: Standorte | location-green.svg |
+| stat: Mitarbeitende | corporate-health-management-helpline-tangerine.svg |
+| Agentur finden (header + sidebar) | twenty-icons/location.svg |
+| Schaden melden (sidebar) | twenty-icons/accident_2.svg |
+| Schreiben Sie uns (sidebar) | twenty-icons/letter_closed.svg |
+
+Icons now render bare (no badge/circle wrapper) with `aria-hidden`,
+matching the live site exactly.
+
+**A second, related correction fell out of re-verifying against the
+evidence screenshot at full resolution:** the service-tile cards had
+been given accent-pastel backgrounds (purple/green/red/yellow). Real
+evidence shows these cards are a **plain neutral surface**
+(`--color-surface`) — the pastel accent family is exclusive to
+quick-access and stat-row tiles. Fixed in the same pass. This also
+precisely relocates the direction's earlier T-PALETTE finding ("pink
+confirmed live in the service-tile row"): the pink is `couch-red.svg`'s
+own illustration color on the Hausratversicherung icon, not a tile
+background accent — the background there is neutral.
+
+**Two additions beyond the literal ask**, both direct extensions of
+the same fix and same evidence: added real icons to the 4 stat-row
+tiles and the 3 contact-band sidebar links, neither of which had
+icons before (an omission, not a violation, but fixing it while the
+real assets were already fetched and matched was the honest thing to
+do rather than leaving an inconsistent half-fixed page).
+
+**Not added:** two more stat-row icons (`leaf-purple.svg`,
+`wind-turbine-red.svg`) were identified in the DOM fetch but their
+corresponding stats ("Bäume in Schutzwaldprojekten gepflanzt", "Strom
+aus erneuerbaren Quellen") have no captured numeric value — left out
+rather than guessed, consistent with the standing no-invented-content
+rule.
+
+Re-ran the full check suite after the fix: 0 404s, 1 `<main>`
+landmark, 0 accessible-name collisions, 0 leaked SVG markup in any
+accessible name, 0 horizontal overflow at all 7 viewports. One
+`detect.mjs` "warning"-severity finding (broken-image, line 19)
+verified as a false positive — it matched literal prose inside this
+file's own provenance comment, not a real `<img>` tag.
+
+---
+
 ## 2026-08-10 — Two reverts: H1 restored, header structure restored
 
 **1. H1 reverted from the merger statement back to "Mehr als eine

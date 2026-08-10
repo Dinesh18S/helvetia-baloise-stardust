@@ -114,11 +114,23 @@ dominantDimension: ia-priority/merger-message-promotion
    in the captured screenshot, with no visible affordance — add the
    `carouselControl` component (`DESIGN.json#extensions.componentStyle
    .carouselControl`) with `aria-label="Vorherige Karte"` /
-   `"Nächste Karte"`. **Accent-tile confirmation**: the per-card icon
-   badge backgrounds use the reserved pastel family (lavender / pink /
-   yellow / teal observed in the captured screenshot) — this is the
-   user-confirmed live deployment of the pink/red-pink tone
-   (`DESIGN.json#extensions.colorMeta.accent-red.note`). Rendered
+   `"Nächste Karte"`. **Corrected 2026-08-10 (icon set + card
+   background)**: cards are a plain neutral surface
+   (`--color-surface`, #fafafa) — **not** the pastel accent family;
+   confirmed by re-cropping `evidence/before/...png` at full
+   resolution. Icons are real DAM-hosted flat illustrations
+   (`car-purple.svg`, `couch-red.svg`, `liability-tangerine-(1).svg`,
+   `travel-insurance-for-air-travel-green.svg`, fetched live from the
+   DOM's `svg[use href]` targets), rendered bare with no badge/circle
+   wrapper — an earlier pass invented a hand-drawn stroke-icon set on
+   pastel circular badges, which violated the project's
+   no-invented-assets rule. **Locates the confirmed pink**: the
+   direction's T-PALETTE resolution said pink is "live in the
+   service-tile row" — precisely located now: it's `couch-red.svg`'s
+   own illustration color on the Hausratversicherung card, not a tile
+   *background* accent (the tile background here is neutral, not
+   pastel — pastel *backgrounds* are exclusive to quick-access and
+   stat-row, per `DESIGN.md` § The Two-Tile Rule). Rendered
    using the icon-badge treatment, not the card background itself —
    card background stays white per `_brand-extraction.json
    #componentStyle.cards`.
@@ -245,21 +257,21 @@ _provenance:
     - section: hero
       lineage: "consolidates captured announcement strip (pages/ch-web-de-privatkunden-html.json#body[0]) + captured hero (pages/...#media.imgs[1], #headings[0]) — direction-authorized promotion, see direction.md#movements (ia-priority: merger-message)"
     - section: quick-access
-      lineage: "pages/ch-web-de-privatkunden-html.json#ctas[href=schaden-melden.html, praemienrechner.html, kontakt.html ×2, ebanking.baloise.ch] + #body[18] (Kundenportal description) + evidence/before/Versicherung-und-Vorsorge-*.png (tile order, 4+2 layout, accent colors) — corrected 2026-08-10, see § Sections item 3"
+      lineage: "pages/ch-web-de-privatkunden-html.json#ctas[href=schaden-melden.html, praemienrechner.html, kontakt.html ×2, ebanking.baloise.ch] + #body[18] (Kundenportal description) + evidence/before/Versicherung-und-Vorsorge-*.png (tile order, 4+2 layout, accent colors) — corrected 2026-08-10, see § Sections item 3; icons re-fetched live from the DOM 2026-08-10 (see § Sections item 6 note), stardust/prototypes/assets/icons/{car-full-crash-one-car-green,calculator-purple,contact-tangerine,laptop-red,online-banking-red,notebook-smartphone-red}.svg"
     - section: faq-band
       lineage: "pages/ch-web-de-privatkunden-html.json#headings[2] + surrounding body text + ctas[href=zusammenschluss.html]"
     - section: vorsorge-teaser
       lineage: "pages/ch-web-de-privatkunden-html.json#body + ctas[href=vorsorge.html, href=anlageloesungen.html]"
     - section: service-tiles
-      lineage: "pages/ch-web-de-privatkunden-html.json#headings[1] + ctas (4 category cards) + assets/screenshots/ch-web-de-privatkunden-html.png (icon-badge accent colors)"
+      lineage: "pages/ch-web-de-privatkunden-html.json#headings[1] + ctas (4 category cards) + evidence/before/Versicherung-und-Vorsorge-*.png (card background, full-resolution re-crop 2026-08-10) + live DOM icon fetch, stardust/prototypes/assets/icons/{car-purple,couch-red,liability-tangerine-1,travel-insurance-air-green}.svg"
     - section: self-check
       lineage: "pages/ch-web-de-privatkunden-html.json#ctas[href=versicherungscheck.html] + surrounding body"
     - section: contact-cta-band
-      lineage: "site-wide system-component (carried from _brand-extraction.json#systemComponents[name=contact-cta-band])"
+      lineage: "site-wide system-component (carried from _brand-extraction.json#systemComponents[name=contact-cta-band]); sidebar icons added 2026-08-10, live DOM fetch, stardust/prototypes/assets/icons/{twenty-accident,twenty-letter-closed,twenty-location}.svg"
     - section: article-teasers
       lineage: "pages/ch-web-de-privatkunden-html.json#headings[4..9] + ctas (4 article cards)"
     - section: stat-row
-      lineage: "site-wide system-component (carried from _brand-extraction.json#systemComponents[name=wir-sind-helvetia-stat-row])"
+      lineage: "site-wide system-component (carried from _brand-extraction.json#systemComponents[name=wir-sind-helvetia-stat-row]); icons added 2026-08-10, live DOM fetch, stardust/prototypes/assets/icons/{gender-neutral-family-purple,warranty-red,location-green,corporate-health-helpline-tangerine}.svg"
     - section: footer
       lineage: "site-wide system-component (carried from _brand-extraction.json#systemComponents[kind=footer])"
   antiTemplatePass:
