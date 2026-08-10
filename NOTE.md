@@ -11,7 +11,6 @@ French: https://dinesh18s.github.io/helvetia-baloise-stardust/stardust/prototype
 
 ## Part one: the case, written for the customer
 
-**The brand migration already happened. The structure did not follow.**
 
 Reading the CSS on helvetia.com tells you something the page itself does not
 announce. The heading and body faces are `BaloiseBold` and `BaloiseText`,
@@ -149,7 +148,7 @@ The fix went in globally, so the French page inherited it.
 
 ### What I overrode
 
-**I rejected my own strongest idea.** My first direction promoted the merger
+My first direction promoted the merger
 statement to the H1, demoting "Mehr als eine Versicherung" to a subhead. It
 rendered well. Then I read the destination page behind the announcement link,
 which states that the new identity combines the Helvetia name with the
@@ -267,9 +266,8 @@ Full reports in `evidence/`.
 
 ---
 
-## Scope, stated plainly
 
-This is a static single page concept, at roughly a day of work.
+This is a static single page concept.
 
 The six mega menus are not rebuilt. Only the language switcher is wired; all
 other navigation links are inert. Two sections are absent because their
