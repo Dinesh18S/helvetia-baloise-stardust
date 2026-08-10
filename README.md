@@ -85,8 +85,6 @@ timestamped record of every change made after the first render, and why.
 
 ## Scope
 
-Static single page concept, roughly a day of work.
-
 The six mega menus are not rebuilt. Only the language switcher is wired, all
 other navigation is inert. Two sections are absent because their content is a
 client rendered widget opaque to static capture, and I left them out rather
@@ -112,8 +110,6 @@ claude plugin install impeccable@impeccable
 /stardust:prototype ch-web-de-privatkunden-html
 /stardust:prototype ch-web-fr-personnes-privees-html
 ```
-
-Stardust 0.18.1. Brand faithful mode, seed deliberately not rolled.
 
 ---
 
