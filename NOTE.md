@@ -1,81 +1,42 @@
 # The Stardust Redesign
 
 Concept redesign of the Helvetia Baloise Swiss private customer page.
-Unaffiliated with Helvetia Baloise. All brand assets, copy and imagery are
-sourced from their own live properties. Nothing is invented.
+
+Unaffiliated with Helvetia Baloise. All brand assets, copy and imagery come from their own live properties. Nothing has been invented.
 
 Live: https://dinesh18s.github.io/helvetia-baloise-stardust/
+
 French: https://dinesh18s.github.io/helvetia-baloise-stardust/stardust/prototypes/ch-web-fr-personnes-privees-html-proposed.html
 
 ---
 
-## Part one: the case, written for the customer
+## Part one: the case
 
+Looking at the CSS on helvetia.com shows that the new Baloise design system is already live. The site uses `BaloiseBold` and `BaloiseText`, hosted directly on the site. The Helvetia/Baloise merger page also makes the direction clear: keep the Helvetia name and bring in the Baloise design.
 
-Reading the CSS on helvetia.com tells you something the page itself does not
-announce. The heading and body faces are `BaloiseBold` and `BaloiseText`,
-self hosted and embedded directly. The type layer of the merged identity is
-already in production. Your own zusammenschluss page states the intent
-plainly: the new identity is the familiar Helvetia name combined with the
-fresh Baloise design. That work shipped.
+The identity has changed. The structure of the site hasn't fully caught up.
 
-What has not followed it is the information architecture. Four things,
-measured rather than asserted:
+A few things stood out from the measurements:
 
-**The heading hierarchy has no first step.** H1 and H2 both compute to 38px.
-There is no visual difference between the most important statement on the
-page and a section label.
+**The heading hierarchy is weak.** H1 and H2 both render at 38px, so the main heading and section headings don't feel different enough.
 
-**The page is illegible to machines.** Lighthouse 13.3.0 scores this page
-1 out of 2 on Agentic Browsing, with the accessibility tree reported as not
-well formed, on both mobile and desktop runs. Links are flagged as not
-crawlable, and interactive elements are missing accessible names. Nine
-separate calls to action read "Mehr erfahren", against 41 distinct CTA labels
-across the captured surface. A screen reader, a crawler and an AI assistant
-answering "where do I report a claim with Helvetia" all face the same
-problem. As search shifts toward synthesis, this stops being an
-accessibility footnote and becomes a distribution question.
+**The page is hard for machines to understand.** Lighthouse 13.3.0 gives the page 1/2 for Agentic Browsing. The accessibility tree is not well formed, some links aren't crawlable, and some interactive elements don't have accessible names. There are also nine CTAs that simply say "Mehr erfahren", even though there are 41 different CTA labels across the captured pages.
 
-**The mobile experience collapses.** Mobile Lighthouse performance is 42
-against 90 on desktop, on the same page. Largest Contentful Paint 6.2
-seconds, First Contentful Paint 5.5 seconds, Total Blocking Time 1,040ms,
-roughly 3,970ms of estimated savings available from render blocking requests
-alone, plus 505 KiB of unused CSS and 489 KiB of unused JavaScript. Insurance
-research happens on phones.
+This is a problem for screen readers, crawlers and AI assistants trying to understand the site.
 
-**The brand fonts have no safety net.** Computed style reports the stacks as
-literally `BaloiseBold` and `BaloiseText` with no comma separated fallback. On
-a slow connection, with no fallback and a six second LCP, there is no
-graceful path.
+**Mobile is much slower.** Performance is 42 on mobile compared with 90 on desktop. Mobile LCP is 6.2s, FCP is 5.5s and Total Blocking Time is 1,040ms.
 
-**And the merger message does not say the same thing in every language.**
-This is the finding that matters most for a group operating in eleven
-markets. The German page says Helvetia and Baloise are now one. The French
-announcement strip says the company is part of the Helvetia Baloise group.
-The French FAQ band says something closer to the German. Same site, same
-week, same rebrand, three different formulations of the single most
-consequential fact the group has published. The French footer also carries
-one fewer link in its Portail column than the German equivalent. These are
-not translation errors. They are what happens when the same message is
-authored separately per locale.
+**The fonts have no fallback.** The computed font stacks are just `BaloiseBold` and `BaloiseText`, with no fallback fonts. If the fonts load slowly, there isn't a graceful fallback.
 
-That last point is the commercial argument. This is what a single authored
-source across markets is for. The page source shows you are on classic AEM:
-`_jcr_content` appears 65 times in the rendered DOM, and the live page still
-publishes `<meta name="editingPage" content="/content/os/ch/web/de/private-customers.html">`,
-so the authoring path is leaking into production output. The move to Edge
-Delivery is not a rebuild. It is the route to authoring these blocks once
-and having every market inherit them, with the performance and machine
-readability problems fixed as a property of the platform rather than as a
-project.
+**The merger message isn't consistent across languages.** The German and French pages describe the merger differently. The French announcement, FAQ and footer also don't completely match the German version.
 
-**What the concept demonstrates.** The same page, same palette, same type
-family, same voice, rebuilt against measured constraints. One `main`
-landmark. Zero accessible name collisions. Contrast between 12:1 and 16.4:1,
-which clears AAA. Zero horizontal overflow across seven viewport widths.
-Eager loading with fetchpriority on the LCP image. Reduced motion respected.
-Every heading a real step in a modular scale. Every call to action naming
-its own destination.
+This is the finding I think matters most. If the same message is authored separately for every market, differences like this are easy to introduce. A shared source would make it easier to keep important messages consistent.
+
+The site is also still using classic AEM. You can see this through things like `_jcr_content`, `/content/dam/` and the `editingPage` metadata.
+
+That makes Edge Delivery a useful next step. The goal isn't to rebuild everything from scratch. It's to make the content easier to author, reuse across markets, and deliver with a lighter frontend.
+
+**What the concept demonstrates:** the same brand, colours, type family and general voice, but with a clearer hierarchy, better accessibility, better mobile performance and clearer CTAs.
 
 ---
 
@@ -83,201 +44,148 @@ its own destination.
 
 ### Which site, and why
 
-`helvetia.com/ch/web/de/privatkunden.html`.
+I chose:
 
-Four things made it the right target. It is a live and expensive problem: a
-merged group mid rebrand across eleven markets and four language regions,
-where the identity work has partly shipped and the structure has not caught
-up. It is already on classic AEM, so the conversation is an upgrade rather
-than a displacement. I verified that two ways: the live page still exposes
-classic AEM conventions, `_jcr_content` paths, a `/content/dam/` asset tree
-and a `/content/` author path in the `editingPage` meta, and Adobe's own
-implementation partners have published Helvetia AEM engagements, including
-Netcentric's Adobe Target rollout across their European properties. Its
-audience skews older, which makes the accessibility findings
-commercial rather than compliance driven. And it is headquartered in Basel.
+`helvetia.com/ch/web/de/privatkunden.html`
 
-Not the helvetia.com root, which is a country selector rather than a
-homepage. Not helvetia-baloise.com, which is the investor facing group site.
-The Swiss private customer page is the actual front door.
+It felt like the right target because the company is in the middle of a merger and rebrand, while the site's structure hasn't fully caught up.
 
-I nearly chose Victorinox instead. Roughly fifty country sites on a
-competitor CMS, iconic brand equity, and a redesign of it would look far
-better in a portfolio. I rejected it because the business case is weaker and
-because a taste led redesign of a beloved brand proves less than a hierarchy
-and accessibility case backed by numbers.
+It's also already running on classic AEM, so this is more of an upgrade story than a complete rebuild.
+
+I also considered Victorinox. It would have made a strong portfolio piece, but the business case wasn't as interesting. Helvetia gave me a stronger opportunity to work with real accessibility, content and architecture problems.
+
+I chose the Swiss private customer page rather than the Helvetia root because the root is mainly a country selector. I also didn't use the investor-facing Helvetia Baloise site.
 
 ### What Stardust gave me that I kept
 
-**The captured brand surface, in full.** 558 live CSS custom properties, the
-computed type scale, the logo pulled from their own DAM at
-`content/dam/os/ch/web/assets/graphics-and-icons/system/logo/helvetia-logo-rgb.svg`,
-the three woff font files, the real multicolour product icons. Everything in
-the concept traces to a captured selector, custom property or computed style.
-This is why the note can make claims about their CSS at all.
+**The captured brand system.** 558 CSS custom properties, the type scale, logo, three WOFF font files, product icons and other real brand assets were captured from the live site.
 
-**The One Navy Rule.** Extract identified that `#000d6e` carries both the
-default text colour and the primary action colour, and flagged that
-introducing a separate neutral text grey would be a departure from the system
-rather than a cleanup. I kept that dual role exactly.
+The concept is based on these values rather than inventing a new visual language.
 
-**Flat surfaces.** Four shadow tokens exist in the sheet and none render
-visibly on any crawled page. Depth comes from flat colour contrast. Kept.
+**The One Navy Rule.** `#000d6e` is used for both default text and primary actions. I kept that instead of introducing a new neutral text colour.
 
-**The pastel accent family as a system.** I had read the four pastels as a
-competing consumer language fighting the institutional navy. Extract showed
-they are token defined and reserved to one component. That corrected me, and
-they stayed.
+**Flat surfaces.** The site has shadow tokens, but they don't visibly appear on the pages I checked. I kept the flat approach.
 
-**Its restraint.** Two things it declined to do are worth naming. Stardust's
-headline feature is structured variation from a rolled seed, and it recorded
-a reasoned decision not to roll one, on the grounds that my brief was a
-constraint set rather than a request for exploration. And when it reached the
-logo variant tension, only one variant having been captured, it refused to
-act rather than fabricate a monochrome mark. It also wrote its own
-supplementary Playwright pass when it found the bundled crawler captured CSS
-custom properties but not computed typography, rather than filling the gap
-with plausible values. On the French page it hit an extraction gap and went
-back to the live DOM for real French text instead of translating the German,
-which is the only reason the locale divergence above was found at all.
+**The pastel accents.** I originally thought the pastel colours might be competing with the navy. The extracted CSS showed that they are part of the existing system and are used in specific components, so I kept them.
 
-**The seven viewport sweep.** It caught two bugs invisible in a single
-screenshot: a carousel leaking horizontal scroll width at narrow widths, and
-the German compound "Versicherungskompetenz" overflowing its grid column.
-The fix went in globally, so the French page inherited it.
+**The tool's restraint.** Stardust didn't invent things when the evidence wasn't there. For example, it didn't create a monochrome logo variant when only one real logo variant had been captured.
 
-### What I overrode
+It also added a small Playwright pass when the first extraction didn't capture computed typography properly. On the French page, it went back to the live DOM for the real French copy instead of translating the German page. That helped uncover the language differences.
 
-My first direction promoted the merger
-statement to the H1, demoting "Mehr als eine Versicherung" to a subhead. It
-rendered well. Then I read the destination page behind the announcement link,
-which states that the new identity combines the Helvetia name with the
-Baloise design and that they remain the customer's partner. So the wordmark
-staying is deliberate and permanent, not a pending migration, and "Mehr als
-eine Versicherung" is the current post merger promise rather than a stale
-tagline. Replacing a permanent brand promise with a time limited
-announcement is a downgrade. I kept the variant as evidence:
-`variants/variant-a-merger-hero.html` against
-`variants/variant-b-brand-promise.html`.
+**The seven viewport checks.** These caught two problems that weren't obvious from a single screenshot: horizontal overflow from a carousel and the German word "Versicherungskompetenz" overflowing its grid column.
 
-**Where the merger notice went, and why not a banner.** The live placement is
-a full width strip above the logo. That region is where users have learned to
-expect cookie consent and service messages, so it attracts banner blindness,
-and it sits outside the content column entirely. Promoting it to the hero
-overstates a temporary fact. It became its own full bleed band directly below
-the hero, on the captured `accent-green` tone, left aligned to the content
-column so it lines up with every other left edge on the page. Three steps up
-from a system message strip, without displacing the brand promise.
+### What I changed
 
-**I answered the tensions instead of letting the tool answer them.** On
-T-PALETTE, keep accent only, do not expand, and give one accent a second job
-as the notice band. On T-SCALE, derive a modular scale from the site's own
-values rather than imposing one. The result introduces exactly one new number
-in the entire spec: H2 at 30px, because 24 x 1.25 = 30 and 30 x 1.25 = 37.5
-reconciles back to their captured 38.
+My first version made the merger message the H1 and moved "Mehr als eine Versicherung" down to a subheading.
 
-**I corrected the tool's evidence.** Extract recorded the pale pink accent
-`#ffeef1` at zero occurrences, sampled with no visible area across five
-pages. My own before capture shows it clearly on the Online Services tile.
-I supplied the correction and it was logged with a citation rather than
-silently accepted. That only surfaced because I read the extraction output
-against my own evidence instead of trusting either one.
+I changed that after checking the actual merger page. The Helvetia name is staying, so "Mehr als eine Versicherung" is still the main brand promise. The merger announcement is important, but it shouldn't replace the main brand message.
 
-**I redesigned a section rather than reproducing it.** On the live page the
-service cards sit half on top of a lifestyle photograph, the fourth card is
-clipped, and a card label lands on a model's face. Reproducing that
-faithfully would have imported the defect. The section became a 2x2 card
-block beside a full height image, nothing clipped, all four cards at equal
-height.
+I kept both directions in:
 
-**I removed a control.** That section carries prev and next carousel arrows
-for four cards that all fit in the viewport. The control had no function, so
-it went. Removing an affordance is a harder call than adding one, and the
-carousel stayed on the news strip where the card count genuinely overflows.
+* `variants/variant-a-merger-hero.html`
+* `variants/variant-b-brand-promise.html`
 
-**I added states the live site does not have.** The service and stat tiles
-contain links but had no hover or focus treatment. Both were added using
-existing tokens, with focus visible distinguishable by more than colour.
-This is an addition rather than a restoration, so it is an override.
+**I moved the merger notice.** The live site puts it in a strip above the logo. I moved it below the hero instead, so the main brand message stays in the hero and the merger information still gets a clear, full-width treatment.
 
-**I restored a pattern the prototype got wrong.** An intermediate render
-turned the Privatkunden and Unternehmen audience switcher into a filled pill,
-which reads as a button. It is a tab. Reverted to the live pattern.
+**I adjusted the type scale.** I kept the site's existing values and added H2 at 30px. This gives the hierarchy a clearer step without introducing a completely new system.
 
-### What I would do next with another week
+**I corrected an extraction issue.** Stardust initially reported that the pale pink accent `#ffeef1` wasn't being used. My own capture showed it on the Online Services tile, so I corrected the finding and logged it rather than silently ignoring it.
 
-**Route it through Edge Delivery.** `stardust:deploy` converts the output
-into authorable EDS blocks, each prototype section becoming one block. That
-is the step that turns this from a concept into something a marketer edits
-without an engineer, and it is what the whole locale argument depends on.
+**I redesigned the service section.** The live cards overlap a lifestyle image, one card is clipped, and one label sits over the model's face. I kept the same content but changed the layout to a 2x2 card grid next to a full-height image.
 
-**Build the navigation as its own block.** This is the biggest deliberate
-omission and the most interesting remaining problem. The header exposes six
-mega menu panels and roughly 90 destinations, all gated behind hover, none of
-it crawlable. The visible page body exposes maybe fifteen. So the
-architecture is not thin, it is hidden, which is consistent with both the
-crawlability flag and the Agentic Browsing score. That is where the
-authoring burden and the machine legibility problem both actually live.
+**I removed an unnecessary control.** The service section had previous/next arrows even though all four cards fit on screen. I removed them. The news carousel still keeps its controls because that content actually overflows.
 
-**Make the merger notice one block with a placement variable.** The instinct
-that it belongs site wide is right; a home page treatment alone is not
-enough. One authored block, placement chosen per page, all locales
-inheriting the same sentence. Which also fixes the divergence.
+**I added hover and focus states.** The live service and stat cards have links but don't have much visible interaction feedback. I added states using the existing design tokens.
 
-**Then the remaining locales**, Italian and English, against the same
-registry and scale, plus a copy governance pass so the announcement reads
-identically in all four.
+**I kept the audience switcher as tabs.** An earlier version made it look like a filled button. That didn't match the live pattern, so I changed it back to tabs.
 
-**And re-measure on a real deployment.** The numbers below are from a static
-page on free hosting. The next thing I would want is the same measurement
-taken on an actual Edge Delivery deployment.
+---
+
+## What I would do next
+
+### 1. Move it into Edge Delivery
+
+`stardust:deploy` can turn the prototype sections into authorable Edge Delivery blocks.
+
+That would be the next step toward making the concept something a content editor could actually maintain.
+
+### 2. Rework the navigation
+
+This is probably the biggest remaining problem.
+
+The header has six mega menus and roughly 90 destinations, most of which are hidden behind hover. The visible page only exposes a small part of that content.
+
+So the problem isn't that the site has too little information. A lot of it is hidden.
+
+I'd build the navigation as its own block and make those destinations easier for both users and machines to discover.
+
+### 3. Make the merger notice reusable
+
+The merger notice should become one shared block that can be used across markets. That would make it easier to keep the wording consistent instead of maintaining separate versions for every locale.
+
+### 4. Apply the same system to the other locales
+
+After the German and French versions, I'd continue with the Italian and English pages using the same components, type scale and content rules.
+
+### 5. Re-measure on a real deployment
+
+The current performance numbers come from a static page on GitHub Pages. I'd run the same tests again once the concept is deployed through Edge Delivery.
 
 ---
 
 ## The measured result
 
-Same tool both times, Lighthouse 13.3.0.
+Same tool in both cases: Lighthouse 13.3.0.
 
-| | Mobile before | Mobile after | Desktop before | Desktop after |
-|---|---|---|---|---|
-| Performance | 42 | 88 | 90 | 99 |
-| Accessibility | 95 | 100 | 91 | 100 |
-| Best Practices | 92 | 100 | 92 | 100 |
-| SEO | 92 | 100 | 92 | 100 |
-| Agentic Browsing | 1 of 2 | **2 of 2** | 1 of 2 | **2 of 2** |
-| LCP | 6.2s | 3.1s | 1.4s | 0.8s |
-| Total Blocking Time | 1,040ms | 220ms | 110ms | 0ms |
-| Cumulative Layout Shift | 0.014 | 0.001 | 0.095 | 0.001 |
+|                         | Mobile before | Mobile after | Desktop before | Desktop after |
+| ----------------------- | ------------: | -----------: | -------------: | ------------: |
+| Performance             |            42 |           88 |             90 |            99 |
+| Accessibility           |            95 |          100 |             91 |           100 |
+| Best Practices          |            92 |          100 |             92 |           100 |
+| SEO                     |            92 |          100 |             92 |           100 |
+| Agentic Browsing        |           1/2 |      **2/2** |            1/2 |       **2/2** |
+| LCP                     |          6.2s |         3.1s |           1.4s |          0.8s |
+| Total Blocking Time     |       1,040ms |        220ms |          110ms |           0ms |
+| Cumulative Layout Shift |         0.014 |        0.001 |          0.095 |         0.001 |
 
-The Agentic Browsing row is the one I would point at. The live page fails
-with a malformed accessibility tree; the concept passes. That is the same
-structural work that produced Accessibility 100, and it is what makes the
-page legible to an assistant answering a customer's question about your
-products, rather than only to a human with a mouse.
+The result I care about most is Agentic Browsing going from 1/2 to 2/2.
 
-One caveat, stated plainly: the performance comparison is not like for like.
-This is a static single page on GitHub Pages measured against a full AEM
-application carrying consent management, analytics, a chat widget and client
-rendered tools. Accessibility, Best Practices, SEO and Agentic Browsing are
-the directly comparable rows, because those are structural rather than
-infrastructural.
+The live page has a malformed accessibility tree. The concept has a much clearer structure, which also helped it reach Accessibility 100.
 
-Full reports in `evidence/`.
+One important caveat: the performance comparison isn't completely like-for-like. The concept is a static page on GitHub Pages, while the live site is a full AEM application with consent management, analytics, chat and other client-side features.
+
+So I'd treat the performance numbers as directional. Accessibility, SEO, Best Practices and Agentic Browsing are more directly comparable.
+
+Full reports are in `evidence/`.
 
 ---
 
+## What this concept does not include
 
-This is a static single page concept.
+This is a static single-page concept, not a full rebuild.
 
-The six mega menus are not rebuilt. Only the language switcher is wired; all
-other navigation links are inert. Two sections are absent because their
-content is a client rendered widget opaque to static capture, a product
-finder and a coverage self check, and I left them out rather than
-substituting invented content. Third party chat and feedback widgets are not
-reproduced. Interaction states beyond hover and focus were not captured from
-the live site and are therefore designed rather than matched.
+The six mega menus are not rebuilt. Only the language switcher is wired; the other navigation links are inert.
 
-Full working artifacts in the repository: `stardust/current/` holds the
-captured brand surface, `stardust/direction.md` the reasoning trace,
-`evidence/before/` the before state with both Lighthouse reports,
-`stardust-decisions-log.md` the tool's own log and `NOTES.md` mine.
+Two sections are missing because they are client-rendered widgets that weren't practical to reproduce from the static capture:
+
+* Product finder
+* Coverage self check
+
+I left them out rather than inventing replacement content.
+
+Third-party chat and feedback widgets are also not reproduced.
+
+Interaction states beyond hover and focus were not captured from the live site, so those states are designed rather than copied.
+
+---
+
+## Repository
+
+* `stardust/current/` — captured brand surface
+* `stardust/direction.md` — reasoning and direction
+* `evidence/before/` — before-state Lighthouse reports
+* `stardust-decisions-log.md` — Stardust's log
+* `NOTES.md` — my notes and decisions
+* `variants/` — alternative directions I explored and rejected
+
+This is a concept based on the live site and measured constraints, not an official Helvetia Baloise redesign.
