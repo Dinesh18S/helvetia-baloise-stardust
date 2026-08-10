@@ -5,6 +5,131 @@ up to date as work proceeds. Reverse-chronological.
 
 ---
 
+## 2026-08-10 — service-tiles: three rounds converging on a genuine redesign
+
+**Round 1 (rejected by user).** Reproduced the live site's actual
+layering — background photo positioned behind, card carousel in front,
+overlapping it on the right. User reported this rendered wrong: the
+image sat above the cards, covering card 3 and hiding card 4 entirely.
+In hindsight, a narrow horizontal-scroll carousel track next to an
+absolutely-positioned image is fragile — whether cards 3/4 are visibly
+"hidden behind" the image or just "one scroll-click away" reads the
+same to a user scanning the section, and the live site's own version
+of this layering is exactly the defect being corrected, not a pattern
+worth reproducing carefully.
+
+**Round 2 (superseded by user before I finished implementing it).**
+User redirected mid-fix: drop the layered reproduction entirely,
+redesign instead. New structure: full-width photo band (16:9, rounded)
+above a plain 4-up card row, carousel dropped since 4 always fits.
+
+**Round 3 (final, implemented).** User refined once more to a proper
+two-column layout: left = 4 cards in a static 2×2 grid, right = the
+photo filling that block's full height. Implemented:
+- `.service-layout`: CSS Grid, 1 column on mobile / `1.2fr 1fr` at
+  ≥700px. DOM order is photo-first so the mobile stack reads
+  "heading → photo → cards" without extra markup; `order` swaps the
+  visual position back (cards left, photo right) at ≥700px — grid
+  items honor `order` for auto-placement the same as flex items, no
+  JS needed.
+- `.service-grid`: 1 column below 480px (cards genuinely stacked, not
+  a cramped 2-up), 2×2 from 480px up.
+- Equal height / aligned baselines: each `.service-card` is
+  `display:flex; flex-direction:column` with `flex-grow:1` on the
+  body paragraph, pushing every card's "… ansehen" link to the same
+  baseline regardless of description length; CSS Grid's default row
+  stretch equalizes card height within each row.
+- Carousel **removed entirely** from this section (component, track,
+  controls) — kept exclusively on the article-teasers strip, the one
+  place the card count (6) genuinely overflows a single row.
+- Word-break: `hyphens: auto` + `overflow-wrap: break-word` on
+  `.service-card h3` (relying on the existing `<html lang="de">`),
+  heading size stepped down to 20px. Verified computationally
+  (`hyphens` computed style = `auto`, `document.documentElement.lang`
+  = `de`) rather than just eyeballed — "Hausratversicherung" renders
+  on one line at the card widths this layout produces; the hyphenation
+  rule stays in as a safety net for any narrower case.
+
+Re-ran the full check suite after each of the three rounds: 0 404s,
+1 `<main>` landmark, 0 accessible-name collisions, 0 horizontal
+overflow at all 7 viewports, every time.
+
+---
+
+## 2026-08-10 — Four targeted fixes to the existing prototype
+
+**1. Service-row background photograph restored.** Not present in the
+structured capture at all — found via `getBoundingClientRect()` walk
+of the live section's own `<img>` elements (it's a real positioned
+`<img>`, not a CSS `background-image`, confirmed empty on a walk of
+ancestor computed styles first). Real asset:
+`home-versicherungen.jpg` (family piggyback-on-beach photo),
+downloaded to `stardust/prototypes/assets/`. Placed in its own grid
+column (content column ~57%, image column ~43% at ≥1024px) rather
+than as a literal same-surface backdrop — this is the correction, not
+a cosmetic choice: on the live site the card carousel overlaps the
+photo far enough that a card label sits on top of it (illegible); a
+separate-column layout makes that overlap structurally impossible
+while still reproducing the real image at the real position.
+
+**2. Merger CTA demoted.** H1 ("Mehr als eine Versicherung") and lede
+("Helvetia – Ihre verlässliche Partnerin...") left untouched, exactly
+as required. The merger banner ("Helvetia und Baloise sind jetzt
+eins." + "Was der Zusammenschluss für Sie bedeutet") restyled from a
+filled surface block with a solid-navy button (primary-CTA visual
+weight) to a thin-left-rule notice line with regular-weight 14px text
+and an outline button — a time-limited announcement now reads as one,
+not as competing with the brand headline above it.
+
+**3. Hover/focus-visible added to interactive + stat tiles.** Used
+`--shadow-small` / `--shadow-normal` — captured tokens
+(`_brand-extraction.json#motifs.shadows`) that were defined but never
+activated anywhere, since the live site is flat-by-default. Activating
+them here for state-response (never at rest) is DESIGN.md's own
+sanctioned pattern, not a "stay flat" violation. Service-tile cards
+use a `:has(.card-link:hover)` / `:has(.card-link:focus-visible)`
+selector so the whole card lifts without restructuring the card into
+one big anchor (the card's own "… ansehen" link stays exactly as it
+was). Quick-access tiles (already single anchors) get direct
+`:hover`/`:focus-visible`. Stat-tiles get a decorative `:hover` only —
+they're informational, not links, so there's nothing to focus.
+Verified via computed-style checks (not just screenshots, since a 2px
+lift + a small shadow is close to imperceptible in a static capture):
+`box-shadow` confirmed changing from `none` to the real
+`--shadow-small` value on all three tile types on hover, and
+`:focus-visible` confirmed engaging (`el.matches(':focus-visible')`)
+with the distinct navy-border treatment on quick-access tiles.
+
+**4. Both carousels checked for dropped cards.**
+- **Stat row ("Wir sind Helvetia") was genuinely dropping 2 of 6
+  entries.** The original build only carried the 4 stats whose numbers
+  had already surfaced in the structured capture; 2 more
+  ("Bäume in Schutzwaldprojekten gepflanzt", "Strom aus erneuerbaren
+  Quellen") were visible in the live DOM with real icons already
+  fetched but no number on hand, so they'd been intentionally left
+  out rather than guessed. A direct live re-fetch this round found
+  both real numbers (**265'000+** trees, **100%** renewable
+  electricity) — all 6 are now real. Converted the section from a
+  static 4-tile grid to a carousel (matching the service-tiles and
+  article-teasers pattern) since 6 tiles no longer fit a fixed 4-up
+  layout; all 6 confirmed present in the DOM and reachable via
+  prev/next.
+- **News-strip first-card clipping: could not reproduce.** Tested the
+  current file's `[data-carousel=articles]` track at all 7 target
+  viewports (1920 down to 360px) via `getBoundingClientRect()` —
+  first card starts flush at the track's left edge with
+  `scrollLeft: 0` at every width, no clip. Reported here rather than
+  silently claimed fixed: if it's still visible in your browser,
+  it may be viewport- or browser-specific in a way headless Chromium
+  isn't reproducing — a screenshot or the exact viewport width would
+  help pin it down.
+
+Re-ran the full check suite after all four fixes: 0 404s, 1 `<main>`
+landmark, 0 accessible-name collisions, 0 horizontal overflow at all
+7 viewports.
+
+---
+
 ## 2026-08-10 — Invented icon set replaced with real DAM assets
 
 **What happened.** The service-tile and quick-access tile icons

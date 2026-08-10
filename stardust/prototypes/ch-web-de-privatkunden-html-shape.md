@@ -62,11 +62,18 @@ dominantDimension: ia-priority/merger-message-promotion
    `startseite.jpg`), white overlay card, left-anchored.
    - **H1**: "Mehr als eine Versicherung" — captured verbatim
      (`pages/...#headings[0]`), restored to its original position.
-   - **Merger banner** (persistent, no dismiss/close control): "Helvetia
-     und Baloise sind jetzt eins." (`pages/...#body[0]`, captured
-     verbatim) paired with CTA "Was der Zusammenschluss für Sie
-     bedeutet" → `/ch/web/de/ueber-uns/zusammenschluss.html` (registry
-     label, `DESIGN.json#extensions.ctaLabelRegistry`).
+   - **Merger banner** (persistent, no dismiss/close control):
+     "Helvetia und Baloise sind jetzt eins." (`pages/...#body[0]`,
+     captured verbatim) paired with CTA "Was der Zusammenschluss für
+     Sie bedeutet" → `/ch/web/de/ueber-uns/zusammenschluss.html`
+     (registry label, `DESIGN.json#extensions.ctaLabelRegistry`).
+     **Corrected 2026-08-10**: demoted to a secondary/notice
+     treatment — thin left rule instead of a filled surface block,
+     regular-weight 14px text, outline (not solid-fill) button. It's a
+     time-limited announcement, not a permanent brand promise, so it
+     must read with visibly less weight than the H1/lede/primary CTA
+     above it; the earlier build gave it primary-CTA-level visual
+     force, which overstated it relative to the restored H1.
    - **Lede**: "Helvetia – Ihre verlässliche Partnerin für alle
      Finanzfragen." — captured verbatim, restored to its original
      position beneath the banner.
@@ -106,34 +113,52 @@ dominantDimension: ia-priority/merger-message-promotion
    + captured photo (couple on couch). These labels are already
    destination-specific — no registry change needed.
 
-6. **service-tile card row** ("Sie leben Ihr Leben. Wir schützen, was
-   Ihnen wichtig ist.") — 4 cards (Autoversicherung / Hausratversicherung
-   / Privathaftpflicht / Reiseversicherung), captured verbatim
-   headings + descriptions + hrefs. **Accessibility fix**: this strip
-   clips its 4th card ("Reiseversicherung") mid-word at desktop width
-   in the captured screenshot, with no visible affordance — add the
-   `carouselControl` component (`DESIGN.json#extensions.componentStyle
-   .carouselControl`) with `aria-label="Vorherige Karte"` /
-   `"Nächste Karte"`. **Corrected 2026-08-10 (icon set + card
-   background)**: cards are a plain neutral surface
-   (`--color-surface`, #fafafa) — **not** the pastel accent family;
-   confirmed by re-cropping `evidence/before/...png` at full
-   resolution. Icons are real DAM-hosted flat illustrations
-   (`car-purple.svg`, `couch-red.svg`, `liability-tangerine-(1).svg`,
-   `travel-insurance-for-air-travel-green.svg`, fetched live from the
-   DOM's `svg[use href]` targets), rendered bare with no badge/circle
-   wrapper — an earlier pass invented a hand-drawn stroke-icon set on
-   pastel circular badges, which violated the project's
-   no-invented-assets rule. **Locates the confirmed pink**: the
-   direction's T-PALETTE resolution said pink is "live in the
-   service-tile row" — precisely located now: it's `couch-red.svg`'s
-   own illustration color on the Hausratversicherung card, not a tile
-   *background* accent (the tile background here is neutral, not
-   pastel — pastel *backgrounds* are exclusive to quick-access and
-   stat-row, per `DESIGN.md` § The Two-Tile Rule). Rendered
-   using the icon-badge treatment, not the card background itself —
-   card background stays white per `_brand-extraction.json
-   #componentStyle.cards`.
+6. **service-tiles** ("Sie leben Ihr Leben. Wir schützen, was Ihnen
+   wichtig ist.") — 4 cards (Autoversicherung / Hausratversicherung /
+   Privathaftpflicht / Reiseversicherung), captured verbatim headings +
+   descriptions + hrefs. **Composition rebuilt twice more, 2026-08-10,
+   converging on a genuine redesign rather than a live-site
+   reproduction:**
+   - *Icons + card background* (first correction): cards are a plain
+     neutral surface (`--color-surface`, #fafafa) — **not** the pastel
+     accent family; confirmed by re-cropping `evidence/before/...png`
+     at full resolution. Icons are real DAM-hosted flat illustrations
+     (`car-purple.svg`, `couch-red.svg`, `liability-tangerine-(1).svg`,
+     `travel-insurance-for-air-travel-green.svg`, fetched live from
+     the DOM's `svg[use href]` targets), rendered bare with no
+     badge/circle wrapper — an earlier pass invented a hand-drawn
+     stroke-icon set on pastel circular badges, which violated the
+     project's no-invented-assets rule. **Locates the confirmed
+     pink**: the direction's T-PALETTE resolution said pink is "live
+     in the service-tile row" — it's `couch-red.svg`'s own
+     illustration color on the Hausratversicherung card, not a tile
+     background accent.
+   - *Structure* (final correction, superseding the live-site
+     reproduction attempted in between): the live site layers a
+     background photo behind an overlapping card row — which clips a
+     card and lets a label land on the photo, a real defect, not a
+     pattern worth reproducing. Redesigned as two columns at ≥700px:
+     **left** = the 4 cards in a static 2×2 grid (`display:flex` +
+     `flex-grow` on each card's body paragraph aligns every card's
+     "… ansehen" link to the same baseline regardless of description
+     length; CSS Grid's default row-stretch equalizes height), **right**
+     = `home-versicherungen.jpg` (the real captured photo, found via a
+     `getBoundingClientRect()` walk of the live section's own `<img>`
+     elements — it's a positioned `<img>`, not a CSS background) filling
+     the full height of the card block, rounded to `--radius-md`.
+     Heading/subtitle span full width above both columns; the "Alle
+     Versicherungen" button sits below the left column. **No carousel**
+     — exactly 4 cards, all fit, so prev/next controls would be
+     non-functional chrome; the carousel mechanism (component,
+     controls, track) stays exclusively on the article-teasers strip,
+     where the card count genuinely overflows the viewport. Mobile
+     (<700px): single column — heading, photo (16:9), then the 4 cards
+     stacked one-per-row below 480px, 2-up from 480–700px.
+   - *Word-break*: `hyphens: auto` + `overflow-wrap: break-word` on
+     `.service-card h3` (relies on the existing `<html lang="de">`),
+     plus the card heading size stepped down to 20px, so
+     "Hausratversicherung" never breaks mid-word — verified via
+     `el.matches` / computed line-count, not just eyeballed.
 
 7. **self-check CTA** ("Sind Sie richtig versichert?") — unchanged.
    Captured body copy + "Jetzt Check starten" →
@@ -158,9 +183,19 @@ dominantDimension: ia-priority/merger-message-promotion
 
 10. **stat row** ("Wir sind Helvetia", system-component role: `other`
     per `_brand-extraction.json#systemComponents[name=wir-sind-helvetia-stat-row]`)
-    — 4 pastel tiles (2 Mio.+ / 165+ / 150+ / 7'000+), captured
-    verbatim numbers and labels. Render using the reserved accent
-    family, unchanged.
+    — **corrected 2026-08-10, now 6 tiles**: 2 Mio.+ / 165+ / 150+ /
+    7'000+ / 265'000+ / 100%, captured verbatim numbers and labels
+    (the last two — "Bäume in Schutzwaldprojekten gepflanzt",
+    "Strom aus erneuerbaren Quellen" — were visible in the live DOM
+    but their numbers hadn't surfaced in the earlier structured
+    capture; a direct live re-fetch found both). Render using the
+    reserved accent family (cycled, since only 4 named pastel tokens
+    exist for 6 tiles); real icons for all 6
+    (`gender-neutral-family-purple`, `warranty-red`, `location-green`,
+    `corporate-health-helpline-tangerine`, `leaf-purple`,
+    `wind-turbine-red`). Rendered as a carousel (prev/next controls)
+    matching sections 6/9, not a static grid — needed once a 6th tile
+    no longer fits a fixed 4-up layout.
 
 11. **footer** (system-component role: `footer`) — unchanged, per
     `_brand-extraction.json#systemComponents[kind=footer]`.
@@ -171,10 +206,25 @@ dominantDimension: ia-priority/merger-message-promotion
   multi-audience hard floor regardless; ~64px desktop section padding).
 - Single-column content flow at desktop, matching the captured site's
   own composition (no grid-system change proposed).
-- Card rows (sections 6, 9) scroll horizontally with the new carousel
-  controls at ≥1024px where the captured 4-up grid doesn't fit without
-  clipping; collapse to a vertical stack at <768px (existing responsive
-  behavior, unchanged).
+- Card rows (sections 6, 9, 10) scroll horizontally with the new
+  carousel controls at ≥1024px where the captured 4-up grid doesn't
+  fit without clipping; collapse to a vertical stack at <768px
+  (existing responsive behavior, unchanged). **Corrected 2026-08-10**:
+  stat-row (section 10) is now also a carousel, not a static 4-grid —
+  see below.
+- Service-tiles (section 6) **corrected 2026-08-10**: 2-column grid at
+  ≥1024px (content/carousel column + background photograph column,
+  `1.3fr / 1fr`), stacking to a single column on mobile. The columns
+  are architecturally separate — the carousel's own scroll region is
+  bounded to the content column and can never render a card label on
+  top of the photograph, which is the defect this layout corrects
+  (the live site lets the card row overlap the image far enough that
+  a label sits on it).
+- Stat-row (section 10) **corrected 2026-08-10**: converted from a
+  static 4-tile grid to a carousel matching sections 6/9's pattern,
+  now carrying all 6 captured stats (2 were previously omitted for
+  lacking a captured number — both numbers were found on a second live
+  DOM fetch, see `_provenance.postRenderCorrections`).
 
 ## Key states
 
@@ -182,6 +232,16 @@ dominantDimension: ia-priority/merger-message-promotion
 - Reduced motion — carousel controls are simple click/keyboard
   triggers, no scroll-jacking; `prefers-reduced-motion` has no special
   case since no motion is introduced this pass.
+- Hover / focus-visible — **added 2026-08-10**: service-tiles,
+  quick-access tiles, and stat-tiles all get a subtle lift +
+  `--shadow-small` on hover (stat-tiles: decorative only, not a link);
+  service-tiles and quick-access tiles additionally get a navy
+  border + `--shadow-small` on `:focus-visible`, distinct from the
+  page's global 3px outline ring. `--shadow-small` /
+  `--shadow-normal` are captured tokens (`_brand-extraction.json
+  #motifs.shadows`) newly activated here — DESIGN.md's own rule is
+  that shadows appear only as a state response, never at rest, so
+  this is the sanctioned use, not a "stay flat" violation.
 
 ## Interaction model
 
@@ -204,11 +264,11 @@ dominantDimension: ia-priority/merger-message-promotion
 - `section[data-section="quick-access"][data-intent="navigate"][data-layout="tile-grid-6"][data-items="6"]`
 - `section[data-section="faq-band"][data-intent="inform"][data-layout="text-image-split"][data-items="1"]`
 - `section[data-section="vorsorge-teaser"][data-intent="inform"][data-layout="text-image-split"][data-items="1"]`
-- `section[data-section="service-tiles"][data-intent="navigate"][data-layout="carousel-4"][data-items="4"]`
+- `section[data-section="service-tiles"][data-intent="navigate"][data-layout="two-col-2x2-grid"][data-items="4"]`
 - `section[data-section="self-check"][data-intent="tool"][data-layout="text-image-split"][data-items="1"]`
 - `section[data-section="contact-cta-band"][data-intent="contact"][data-layout="full-width-tiles"][data-items="3"]`
 - `section[data-section="article-teasers"][data-intent="inform"][data-layout="carousel-4"][data-items="4"]`
-- `section[data-section="stat-row"][data-intent="impact"][data-layout="grid-4"][data-items="4"]`
+- `section[data-section="stat-row"][data-intent="impact"][data-layout="carousel-4"][data-items="6"]`
 - `footer[data-section="footer"][data-intent="navigate"][data-layout="mega"]`
 
 ## Unsourced content (placeholder list)
@@ -263,7 +323,7 @@ _provenance:
     - section: vorsorge-teaser
       lineage: "pages/ch-web-de-privatkunden-html.json#body + ctas[href=vorsorge.html, href=anlageloesungen.html]"
     - section: service-tiles
-      lineage: "pages/ch-web-de-privatkunden-html.json#headings[1] + ctas (4 category cards) + evidence/before/Versicherung-und-Vorsorge-*.png (card background, full-resolution re-crop 2026-08-10) + live DOM icon fetch, stardust/prototypes/assets/icons/{car-purple,couch-red,liability-tangerine-1,travel-insurance-air-green}.svg"
+      lineage: "pages/ch-web-de-privatkunden-html.json#headings[1] + ctas (4 category cards) + evidence/before/Versicherung-und-Vorsorge-*.png (card background, full-resolution re-crop 2026-08-10) + live DOM icon fetch, stardust/prototypes/assets/icons/{car-purple,couch-red,liability-tangerine-1,travel-insurance-air-green}.svg + live DOM background-photo fetch 2026-08-10, stardust/prototypes/assets/home-versicherungen.jpg (found via getBoundingClientRect() walk of the section's <img> elements — not a CSS background-image, a positioned real <img>)"
     - section: self-check
       lineage: "pages/ch-web-de-privatkunden-html.json#ctas[href=versicherungscheck.html] + surrounding body"
     - section: contact-cta-band
@@ -271,7 +331,7 @@ _provenance:
     - section: article-teasers
       lineage: "pages/ch-web-de-privatkunden-html.json#headings[4..9] + ctas (4 article cards)"
     - section: stat-row
-      lineage: "site-wide system-component (carried from _brand-extraction.json#systemComponents[name=wir-sind-helvetia-stat-row]); icons added 2026-08-10, live DOM fetch, stardust/prototypes/assets/icons/{gender-neutral-family-purple,warranty-red,location-green,corporate-health-helpline-tangerine}.svg"
+      lineage: "site-wide system-component (carried from _brand-extraction.json#systemComponents[name=wir-sind-helvetia-stat-row]); icons added 2026-08-10, live DOM fetch, stardust/prototypes/assets/icons/{gender-neutral-family-purple,warranty-red,location-green,corporate-health-helpline-tangerine,leaf-purple,wind-turbine-red}.svg; 2 additional stats (265'000+ trees, 100% renewable) recovered via live DOM re-fetch 2026-08-10, pages/ch-web-de-privatkunden-html.json#body[35..36] basis confirmed against live numbers"
     - section: footer
       lineage: "site-wide system-component (carried from _brand-extraction.json#systemComponents[kind=footer])"
   antiTemplatePass:
@@ -280,11 +340,16 @@ _provenance:
       alternatives: ["centered-stack hero (rejected — the captured site uses a left-anchored overlay card on a full-bleed photo, which IS the brand's own signature hero shape)", "full-width type-only hero with no photo (rejected — drops the captured lifestyle photography that carries the brand's warm register)", "left-anchored overlay card on full-bleed photo (picked)"]
       picked: "left-anchored overlay card on full-bleed photo"
       rationale: "Matches the captured hero exactly (pages/...#media.imgs[1]); only the card's copy hierarchy changes (merger message promoted to H1), not the composition shape — per direction.md's brand-faithful mode, the composition itself is not a divergence target."
-    - pattern: "card-strip / carousel"
+    - pattern: "card-strip / carousel — article-teasers (6 items)"
       defaultReflex: "5-up image-card grid as category nav"
-      alternatives: ["static 4-up grid with no overflow handling (rejected — this IS the current bug: cards clip mid-word with no affordance)", "vertical list (rejected — the captured site's 4-up horizontal shape is itself the brand's own signature catalogue pattern per _brand-extraction.json#motifs.patterns[card-grid]; replacing it would be an unrequested structural move)", "4-up grid + visible carousel controls (picked)"]
-      picked: "4-up grid + visible carousel controls"
-      rationale: "Direction brief names this exact fix by name ('give the carousels a visible affordance'); the underlying grid shape is preserved as brand-faithful, only the missing affordance is added."
+      alternatives: ["static 4-up grid with no overflow handling (rejected — this IS the original bug: cards clip mid-word with no affordance)", "vertical list (rejected — the captured site's horizontal card-strip shape is itself the brand's own signature catalogue pattern per _brand-extraction.json#motifs.patterns[card-grid])", "horizontal-scroll track + visible carousel controls (picked)"]
+      picked: "horizontal-scroll track + visible carousel controls"
+      rationale: "6 captured articles genuinely overflow any single-row layout at readable card widths; the direction brief names this exact fix by name ('give the carousels a visible affordance')."
+    - pattern: "card-strip / carousel — service-tiles (4 items) — SUPERSEDED 2026-08-10"
+      defaultReflex: "5-up image-card grid as category nav"
+      alternatives: ["carousel matching the article-teasers pattern (tried first, then explicitly rejected by the user — exactly 4 cards always fit; prev/next controls would be non-functional chrome on a set that never overflows)", "layered photo-behind-cards reproducing the live site (tried second, also explicitly rejected — the live pattern clips a card and lets a label land on the photo; reproducing a defect is not brand-fidelity)", "two-column layout: 2×2 card grid + full-height photo column, no carousel (picked, per explicit user direction)"]
+      picked: "two-column layout: 2×2 card grid + full-height photo column, no carousel"
+      rationale: "User-directed structural correction across three rounds of feedback — this is the one case on the page where the redesign deliberately does not reproduce the live site's composition, because the live composition is itself the defect (clipped card, label-on-photo). See § Sections item 6 for the full history."
     - pattern: "CTA band"
       defaultReflex: "full-width color-block CTA band with centered copy"
       alternatives: ["centered-copy variant (rejected — captured site uses a left-heading / right-sidebar-list split, which is the brand's own signature contact-band shape)", "left-heading / right-sidebar-list split (picked, matches captured system component verbatim)"]
