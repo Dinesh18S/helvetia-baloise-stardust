@@ -5,6 +5,163 @@ up to date as work proceeds. Reverse-chronological.
 
 ---
 
+## 2026-08-10 — Post-render correction: "product-finder" was real content, not a widget
+
+**What happened.** The third and last placeholder box in the prototype
+(labeled `product-finder`, right below the hero) was misclassified all
+the way back at `extract` time. User identified it as the "Wir sind
+für Sie da." quick-access section — a 4-tile accent-colored row
+(Schaden melden / Prämie berechnen / Kontakt aufnehmen / Online-
+Services nutzen) plus a 2-tile plain row (E-Banking / Kundenportal)
+below — the page's primary task navigation, confirmed legible in
+`evidence/before/Versicherung-und-Vorsorge-für-Privatkunden-Helvetia-ch-08-10-2026_10_29_AM.png`.
+
+**Root cause.** Same lazy-load pattern as the two images fixed
+earlier this session — extract's crawl wait window resolved before
+this section's content settled, so it was captured empty and (wrongly)
+generalized into the same "opaque client-side widget" bucket as the
+genuinely-opaque product-finder tool.
+
+**Fix.** Cropped and inspected the before-screenshot at full
+resolution (had to work around no PIL/ImageMagick on this machine —
+used a Playwright page displaying the PNG via `file://` + clipped
+`page.screenshot()` to extract exact-pixel crops) to confirm tile
+order, colors, and the 4+2 layout. Cross-referenced against
+`ctas[]`/`body[18]` already captured in
+`pages/ch-web-de-privatkunden-html.json` for verbatim titles,
+descriptions, and hrefs — no new copy was invented. Rebuilt the
+section with the correct accent-tile colors (green/purple/yellow/red,
+matching the screenshot) and updated `stardust/prototypes/ch-web-de-
+privatkunden-html-shape.md` accordingly. Data-section renamed
+`product-finder` → `quick-access`.
+
+**Process bug caught and fixed inline.** While re-adding the
+provenance/critique block to the regenerated HTML, an `Edit` call
+accidentally dropped the closing `-->` of the leading HTML comment,
+which would have swallowed the entire `<head>`/`<body>` into a single
+unterminated comment (blank-rendering page). Caught by re-running the
+full verification suite (404/main-landmark/overflow checks) rather
+than assuming the edit succeeded — confirms the value of re-verifying
+after every regeneration, not just after the first one. Fixed and
+re-verified clean.
+
+**Net result:** this page now ships with **zero placeholders** — all
+three original runtime-placeholder boxes (product-finder/quick-access,
+FAQ-band image, self-check image) resolved to real captured content
+across this session's two rounds of correction.
+
+**Lesson for `extract`, reinforced.** A third instance of the same
+lazy-load blind spot on one page is a strong signal this CMS lazy-
+loads most in-page content blocks, not just images. Worth widening
+`crawl.mjs`'s wait/scroll strategy for this site specifically before
+the next `extract --refresh`, rather than treating each empty capture
+as a one-off.
+
+---
+
+## 2026-08-10 — Post-render correction: 2 placeholder images resolved
+
+**What happened.** User identified that 2 of the 3 placeholder boxes in
+the rendered prototype (`faq-band`, `self-check`) were static images
+the crawl failed to capture, not JS widgets like the third
+(`product-finder`). Root cause: both are lazy-loaded `<img
+data-src="...">` elements — the crawler's wait window resolved before
+the lazy-load library swapped `data-src` into `src`, so extract
+recorded them as empty/tiny and the earlier `_brand-extraction.json`
+notes mis-generalized them as "opaque to extraction" alongside the
+genuinely-opaque product-finder widget.
+
+**Fix.** Re-fetched the live page directly with Playwright, scrolled
+through it to trigger the lazy-load, and read the resolved `data-src`
+values directly off the DOM (not guessed):
+- FAQ band → `zusammenschluss.jpg` (1200×900, mother/daughter portrait)
+- Self-check → `insurance-check.jpg` (1200×900, home-office desk scene)
+
+Downloaded both to `stardust/prototypes/assets/` and wired them into
+`ch-web-de-privatkunden-html-proposed.html` in place of the placeholder
+boxes. No other image was touched. Re-ran the full check suite
+(0 404s, 1 main landmark, 0 accessible-name collisions, 0 horizontal
+overflow at all 7 viewports) — all still clean after the change.
+
+**Lesson for `extract`.** The crawler's lazy-load handling should
+distinguish "image element present with an unresolved `data-src`" from
+"no image at this position" — the former is a static asset worth a
+longer wait or a direct `data-src` read; only the latter is a genuine
+JS-widget placeholder. Worth fixing in `stardust/scripts/crawl.mjs`
+for future runs on this same site (the FAQ/Vorsorge/self-check pattern
+suggests this CMS lazy-loads most in-page imagery this way).
+
+---
+
+## 2026-08-10 — `stardust:prototype ch-web-de-privatkunden-html`
+
+**What ran.** Rendered `stardust/prototypes/ch-web-de-privatkunden-html-proposed.html`
+against the resolved direction, delegated to `impeccable:craft` in
+established-world/extend mode (PRODUCT.md + DESIGN.md already pinned
+the system, so no concept-seed roll or visual-identity workshop ran).
+Authored the page-shape brief first
+(`stardust/prototypes/ch-web-de-privatkunden-html-shape.md`, 11
+sections in render order with full Discipline 1-5+9 provenance:
+captured-source lineage, anti-template pass, substrate transitions,
+voice classification, reflex-reject/copy-cadence bypass reasoning for
+the Mode A pinned fonts and captured-verbatim copy).
+
+**Two real bugs found and fixed during the mandatory viewport sweep
+(1920/1440/1280/800/414/375/360px)**, not visible in a single-viewport
+screenshot:
+1. Carousel sections leaked their internal horizontal-scroll width
+   into the document's `scrollWidth` at narrow viewports (a
+   `min-width:0` / `overflow:hidden` containment gap on the carousel
+   wrapper — a classic flex/grid intrinsic-sizing trap).
+2. The German compound word "Versicherungskompetenz" in the stat row
+   forced a grid column wider than its track at 375px because no
+   `overflow-wrap: break-word` was set — confirms the project's own
+   French-stress-test discipline generalizes to German long-word
+   wrapping too; fixed globally, not just for that one instance.
+
+**Content-completeness gap surfaced.** Several visible sections on the
+live page (FAQ band, Vorsorge/Anlegen teaser, self-check block) render
+their heading/body copy via non-semantic elements the crawler's
+`h1-h6`/`p`/`li`/`blockquote` selectors don't capture — the only
+record of that copy is the Phase 2.5 vision-check screenshot from
+extract. Reused it (transcribed from the captured screenshot, cited as
+such), rather than treating it as unsourced/placeholder, since it's
+directly observed real copy, not invented. Flagging for a future
+`extract` pass: the crawler should widen its heading/body capture to
+styled non-semantic elements, or this class of copy stays permanently
+screenshot-only.
+
+**Recovered real image URLs the structured capture missed.** Six
+article-teaser thumbnail URLs were absent from `media.imgs[]` but
+present, embedded, inside the crawler's `cta.label` field (a capture
+quirk where nested `<img>` markup leaked into `textContent`). Extracted
+via regex rather than guessing placeholder paths — all 6 images load
+correctly in the rendered prototype.
+
+**Gates (Phase 2.5-2.7).** Critique + audit run as a disclosed
+single-context assessment (no sub-agent Task-tool orchestration used
+this pass) rather than impeccable's dual-agent default — banner and
+reasoning recorded in the file's `_provenance.critique.method`. Result:
+0 P0/P1 across both. Verified directly: exactly one `<main>` landmark,
+zero accessible-name collisions across differing CTA destinations (the
+named Lighthouse discernible-name failure), contrast 12-16.4:1
+(WCAG AAA-level) on every text/surface pairing, zero horizontal
+overflow at all 7 target viewports after the two fixes above, LCP hero
+image marked `eager`/`fetchpriority=high`, `prefers-reduced-motion`
+correctly overrides `scroll-behavior`. 18 advisory-only detector
+findings (micro-tokens — hover shades, small utility text sizes — used
+outside DESIGN.md's minimal core scale); acknowledged, not blocking,
+not promoted into DESIGN.md this pass.
+
+**State:** `ch-web-de-privatkunden-html` → `prototyped`.
+
+**Next:** open `stardust/prototypes/ch-web-de-privatkunden-html-proposed.html`
+for review; say "approve" to advance it, or give a refinement phrase to
+iterate. Siblings (`geschaeftskunden`, `ueber-uns`, `personnes-privees`)
+remain `directed`, not yet prototyped.
+
+---
+
 ## 2026-08-10 — `stardust:direct` — brand-faithful hierarchy + accessibility direction
 
 **What ran.** User supplied a fully-resolved, decisive direction brief

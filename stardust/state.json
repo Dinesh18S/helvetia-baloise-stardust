@@ -1,7 +1,7 @@
 {
   "_provenance": {
-    "writtenBy": "stardust:direct",
-    "writtenAt": "2026-08-10T13:00:00Z",
+    "writtenBy": "stardust:prototype",
+    "writtenAt": "2026-08-10T15:00:00Z",
     "stardustVersion": "0.18.1"
   },
   "site": {
@@ -24,15 +24,16 @@
       "url": "https://www.helvetia.com/ch/web/de/privatkunden.html",
       "title": "Versicherung und Vorsorge für Privatkunden | Helvetia.ch",
       "type": null,
-      "status": "directed",
+      "status": "prototyped",
       "history": [
         { "status": "extracted", "at": "2026-08-10T11:27:57Z" },
-        { "status": "directed", "at": "2026-08-10T13:00:00Z" }
+        { "status": "directed", "at": "2026-08-10T13:00:00Z" },
+        { "status": "prototyped", "at": "2026-08-10T15:00:00Z" }
       ],
       "stale": false,
       "staleReason": null,
       "currentStatePath": "stardust/current/pages/ch-web-de-privatkunden-html.json",
-      "prototypePath": null,
+      "prototypePath": "stardust/prototypes/ch-web-de-privatkunden-html-proposed.html",
       "migratedPath": null
     },
     {
