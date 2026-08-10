@@ -5,6 +5,132 @@ up to date as work proceeds. Reverse-chronological.
 
 ---
 
+## 2026-08-11 — FR audience switcher brought to parity with DE's bold active-tab treatment
+
+Follow-up to the previous entry's flagged drift: the FR page's
+`.audience-switch` CSS still carried the pre-round-11 2px-underline-only
+pattern after DE's own audience tab was independently strengthened.
+Applied the identical change: active tab (`Personnes privées`) now
+BaloiseBold (`font-weight:700`, `font-family:var(--font-display)`) with a
+3px underline; inactive tab (`Entreprises`) stays BaloiseText regular with
+a transparent 3px border-bottom. Verified via computed styles — byte-for-
+byte identical values to the DE page's own active/inactive tab styles —
+and a full verification pass (integrity, main landmark, 0 missing
+accessible names, 0 horizontal overflow at all 7 target viewports).
+
+## 2026-08-11 — Language switcher wired: DE ⇄ FR cross-links between the two prototypes
+
+Only the language switcher was touched, in both `ch-web-de-privatkunden-
+html-proposed.html` and `ch-web-fr-personnes-privees-html-proposed.html` —
+every other nav link (main nav, audience switcher, footer, CTAs) is
+untouched. DE and FR are now real `<a>` elements with relative hrefs (bare
+filenames — both prototype files sit in the same `stardust/prototypes/`
+directory, so this resolves correctly regardless of the site's base path
+on GitHub Pages):
+
+- DE page: `DE` → `ch-web-de-privatkunden-html-proposed.html` (self-link,
+  `aria-current="true"`), `FR` → `ch-web-fr-personnes-privees-html-
+  proposed.html`.
+- FR page: `FR` → `ch-web-fr-personnes-privees-html-proposed.html`
+  (self-link, `aria-current="true"`), `DE` → `ch-web-de-privatkunden-html-
+  proposed.html`.
+
+`IT` and `EN` stay as inert `<button type="button">` elements on both
+pages, unchanged. CSS selector `.lang-switch button[aria-current="true"]`
+generalized to `.lang-switch [aria-current="true"]` so the existing
+bold+underline active-state styling applies whether the element is an
+`<a>` (DE/FR) or a `<button>` (IT/EN, though neither ever carries
+`aria-current`) — no new CSS rule needed, base link/button styling was
+already shared via `.header-actions button, .header-actions a`.
+
+Verified via Playwright: clicked FR from the DE page — landed on the FR
+file with its own H1 ("Plus qu'une simple assurance"); clicked DE from the
+FR page — landed back on the DE file ("Mehr als eine Versicherung"). IT/EN
+confirmed to still be plain buttons with no `href`. Main-nav hrefs spot-
+checked unchanged (still absolute helvetia.com URLs). Full verification
+suite re-run on both files: comment/charset integrity, main-landmark count
+1, 0 missing accessible names, 0 horizontal overflow at all 7 target
+viewports.
+
+## 2026-08-10 — Audience switcher: active tab strengthened to bold + 3px underline
+
+The round-10 tab pattern (navy text + thin underline on active) was judged
+too weak a signal for the active state. Active tab (`Privatkunden`) now
+renders in BaloiseBold (`font-weight: 700`, `font-family: var(--font-
+display)`) with a 3px underline (was 2px); inactive tab (`Unternehmen`)
+stays BaloiseText regular with a transparent (invisible) 3px border-bottom
+so no layout shift occurs between states. Checked whether BaloiseBold at
+14px nav size would read as visually inconsistent with the rest of the
+header before keeping it — it does not: the language switcher immediately
+to its right already uses the identical bold+underline convention for its
+own active item (`DE`), so the audience switcher now matches an existing
+in-header precedent rather than introducing a new one. Verified via
+computed styles (active: `fontWeight 700`, `fontFamily` starts with
+`BaloiseBold`, `borderBottomWidth 3px`; inactive: `fontWeight 400`,
+`fontFamily` starts with `BaloiseText`, `borderBottomColor rgba(0,0,0,0)`)
+and a full verification pass (comment/charset integrity, main-landmark
+count, 0 missing accessible names, 0 horizontal overflow at all 7 target
+viewports).
+
+## 2026-08-10 — French sibling (personnes-privees) prototyped: the layout stress test
+
+Rendered `stardust/prototypes/ch-web-fr-personnes-privees-html-proposed.html`
+as a same-system sibling of the DE `privatkunden` prototype, per
+`direction.md`'s own command sequence and `DESIGN.md`'s explicit framing of
+this page as "the layout stress test" for the shared component system. No
+new layout or divergence decisions were made — same tokens, same CSS, same
+component vocabulary, content substituted only.
+
+**Content-sourcing gap, resolved via live re-fetch, not translation.** The
+structured capture (`pages/ch-web-fr-personnes-privees-html.json`) is
+missing the hero lede and several section headings — the same gap class as
+`_brand-extraction.json#voice`, which is home/DE-page-only by its own scope.
+Rather than translating the German copy, live-fetched the FR page's actual
+rendered DOM this session (Playwright, shadow-DOM-piercing walk, matched by
+heading-tier computed font-size) to recover the real French text at the
+source. This also confirmed the DE prototype's own headings are accurate
+captures of its live DOM, not fabricated — same method applied to both
+pages for verification.
+
+**Two genuine locale divergences preserved, not "corrected" into
+parallelism with DE:**
+- The merger/announcement line reads "Nous faisons partie du groupe
+  Helvetia Baloise." on the FR site — not a translation of "Helvetia und
+  Baloise sind jetzt eins." For the merger-notice band itself, used the FR
+  page's own FAQ-band opening sentence, "Helvetia et Baloise ne font plus
+  qu'une.", since DE itself reuses one merger sentence in two places
+  (merger-notice + FAQ band) and this is the FR site's real closest
+  equivalent — same reuse pattern, real FR wording.
+- Quick-access heading is "Nous sommes à vos côtés.", genuinely distinct
+  from the contact-band's "Nous sommes là pour vous." — DE reuses one
+  phrase for both; FR's live site doesn't, and it wasn't forced to match.
+- FR's footer "Portail" column has 1 real link vs. DE's 2 — rendered as
+  captured, not padded to match DE's column count.
+
+**Layout stress test result:** "Responsabilité civile privée" (29 chars,
+the longest heading either locale's system has had to render at the
+existing 20px card-heading size) renders on a single line with room to
+spare, via the same `hyphens:auto` + `overflow-wrap:break-word` treatment
+already in place for DE's "Hausratversicherung" — no scale adjustment
+needed. Confirmed via Playwright line-count check, not just eyeballed.
+
+**Verification.** Comment/charset integrity intact; main-landmark count 1;
+0 missing accessible names; 0 same-label-different-href collisions (the
+CTA registry holds under FR content too); WCAG contrast 15–16.4:1 on every
+text/surface pairing (same values as DE, since colors are 100% inherited);
+0 horizontal overflow at all 7 target viewports; hamburger nav collapses
+correctly at 900px. `detect.mjs` findings: 19/19 advisory-level findings
+are byte-identical to already-accepted findings on the DE sibling (zero new
+CSS drift); the 1 `dark-glow` warning is a pre-existing false positive on
+the same unchanged `:has()` hover-shadow rule DE's own file already
+carries. Marked `prototyped` in `state.json`.
+
+Assets: all photographs (hero, zusammenschluss.jpg, home-versicherungen.jpg,
+insurance-check.jpg, couple-relaxing image) are the same underlying files
+as the DE sibling — confirmed via matching asset IDs in the FR page's own
+live DOM — reused directly via their `/fr/`-locale URLs, no new downloads.
+Icons are locale-neutral, reused verbatim from the DE sibling's own fetch.
+
 ## 2026-08-10 — Audience switcher: filled pill replaced with the live tab pattern
 
 The Privatkunden/Unternehmen switcher was rendering as a filled navy

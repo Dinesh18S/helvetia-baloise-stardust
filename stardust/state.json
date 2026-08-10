@@ -73,15 +73,16 @@
       "url": "https://www.helvetia.com/ch/web/fr/personnes-privees.html",
       "title": "Assurance et prévoyance pour particuliers | Helvetia.ch",
       "type": null,
-      "status": "directed",
+      "status": "prototyped",
       "history": [
         { "status": "extracted", "at": "2026-08-10T11:28:10Z" },
-        { "status": "directed", "at": "2026-08-10T13:00:00Z" }
+        { "status": "directed", "at": "2026-08-10T13:00:00Z" },
+        { "status": "prototyped", "at": "2026-08-10T18:10:00Z" }
       ],
       "stale": false,
       "staleReason": null,
       "currentStatePath": "stardust/current/pages/ch-web-fr-personnes-privees-html.json",
-      "prototypePath": null,
+      "prototypePath": "stardust/prototypes/ch-web-fr-personnes-privees-html-proposed.html",
       "migratedPath": null
     },
     {
