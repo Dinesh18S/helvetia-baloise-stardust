@@ -5,6 +5,74 @@ up to date as work proceeds. Reverse-chronological.
 
 ---
 
+## 2026-08-10 — Merger notice made its own distinct band; quick-access reverted to white
+
+The merger notice (added earlier the same day, see entry below) still
+read as "a strip floating on white" — its `--color-surface` (#fafafa)
+background was too close to the surrounding sections' off-white tone
+to register as its own distinct section. Changed to
+`--color-accent-green` (#e9fbf7, already an existing captured-palette
+token, no new value invented) as a full-bleed band, content still
+constrained to the container width. It now sits with zero gap directly
+below the hero — no CSS change was needed for the adjacency itself,
+since sections are plain block siblings with no margin between them;
+the "gap" the earlier round showed was a background-contrast illusion,
+not a spacing bug.
+
+That contrast fix exposed a second issue: the "Wir sind für Sie da"
+quick-access section below was rendering on its own off-white
+`surface-alt` background, which — now that the merger notice above it
+is visibly distinct — read as a second, redundant off-white zone and
+made the combined padding look oversized. Removed `class="surface-alt"`
+from the quick-access section wrapper so it reverts to plain white;
+its two plain tiles (E-Banking, Kundenportal) keep their own off-white
+card background independently, so no visual affordance is lost there.
+Padding was already the generic `--space-xxl` (48px) used by every
+other section — confirmed via computed-style check, not adjusted.
+
+Verified via computed styles (not just a screenshot): `.merger-notice`
+`backgroundColor: rgb(233, 251, 247)` (#e9fbf7), `padding-block: 24px`
+(`--space-lg`), 0px gap between hero bottom and merger-notice top;
+quick-access `backgroundColor: rgba(0,0,0,0)` (transparent onto white),
+`padding-block: 48px`. Full verification suite re-run: comment/charset
+integrity, main-landmark count (1), zero accessible-name gaps, no
+horizontal overflow at any of the 7 target viewports.
+
+## 2026-08-10 — Merger notice moved out of the hero card; hero height capped
+
+**Merger notice extracted.** The in-card demoted treatment (thin left
+rule + outline button, from the previous round) still read as a
+second message competing with the hero for attention. Removed from
+the hero card entirely — the card now contains only H1 ("Mehr als
+eine Versicherung"), the lede, and the single primary CTA ("Mehr über
+Helvetia erfahren"). The merger fact now lives in its own full-width
+section directly below: `--color-surface` background, one plain line
+of body-size navy text with an inline underlined link, `--space-lg`
+vertical padding, no icon/border/button. Caught and fixed a real bug
+during verification: the new section's `class="merger-notice"` had
+been left off the actual `<section>` tag (only the `data-section`
+attribute was set), so the CSS rule silently matched nothing and the
+strip rendered with a transparent background and the generic 48px
+section padding instead of the specified `#fafafa` / 24px — computed-
+style checks caught this before shipping (`backgroundColor` was
+`rgba(0,0,0,0)` instead of `rgb(250,250,250)`), not just a visual
+glance.
+
+**Hero height capped.** Was `min-height: 560px` with no ceiling,
+filling nearly the full viewport at common desktop heights. Now
+`min-height: 420px; max-height: 62vh` — at a standard 1440×900
+viewport this leaves ~480px visible below the fold, enough for the
+merger notice and the top of the next section to show without
+scrolling.
+
+Re-ran the full check suite after both fixes: 0 404s, 1 `<main>`
+landmark, 0 accessible-name collisions, 0 horizontal overflow at all
+7 viewports, and confirmed via computed styles (not just a screenshot)
+that the notice strip's background/padding/text color/link
+underline all match spec exactly.
+
+---
+
 ## 2026-08-10 — service-tiles: three rounds converging on a genuine redesign
 
 **Round 1 (rejected by user).** Reproduced the live site's actual

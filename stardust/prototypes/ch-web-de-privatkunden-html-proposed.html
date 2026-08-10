@@ -27,6 +27,10 @@
       what: "Four targeted fixes. (2) Demoted the merger banner to a secondary notice treatment (thin left rule, regular-weight text, outline button) — H1 and lede left untouched. (3) Added hover/focus-visible to service-tiles, quick-access tiles, and stat-tiles using the captured --shadow-small/--shadow-normal tokens (defined but previously unused — DESIGN.md's own rule is shadows-as-state-response, not a stay-flat violation); verified via computed-style checks, not just screenshots. (4) Stat-row was genuinely dropping 2 of 6 real entries (their numbers hadn't surfaced in the original structured capture); a second live DOM re-fetch found both (265'000+ trees, 100% renewable electricity) and the section is now a full 6-card carousel. The reported article-teasers first-card clip could NOT be reproduced after testing all 7 target viewports via getBoundingClientRect() — flagged rather than silently claimed fixed. (1) The service-row background photo (fix 1) went through 3 rounds — see the next entry."
     - at: "2026-08-10T20:00:00Z"
       what: "service-tiles, 3 rounds. R1: reproduced the live site's actual photo-behind/cards-in-front layering — user reported the image covered card 3 and hid card 4 (a narrow carousel track next to an absolute-positioned image is fragile; reproducing the live site's own defect was the wrong correction regardless). R2: user redirected mid-fix to a redesign — full-width photo band above a plain 4-up row, carousel dropped. R3 (final, implemented): two-column layout — left: 4 cards in a static 2x2 grid (equal height via CSS Grid row-stretch; aligned baselines via flex-grow on each card's body paragraph); right: home-versicherungen.jpg filling the column's full height, radius-md corners. Carousel component/track/controls removed entirely from this section (kept only on article-teasers, where the count genuinely overflows). hyphens:auto + overflow-wrap:break-word + a 20px card-heading size fix 'Hausratversicherung' breaking mid-word; verified computationally (hyphens computed style, documentElement.lang), not just eyeballed. Mobile: heading, photo (16:9), then cards stacked 1-up below 480px / 2-up from 480-700px."
+    - at: "2026-08-10T21:00:00Z"
+      what: "Merger notice moved out of the hero card entirely (the demoted in-card treatment from the previous round still read as a second message splitting the hero) into its own full-width section directly below: --color-surface background, one plain line of body-size navy text + inline underlined link, --space-lg vertical padding, no icon/border/button. Hero card now contains only H1 + lede + the single primary CTA. Hero height capped (min-height:420px; max-height:62vh, was an uncapped min-height:560px filling nearly the full viewport) so the next section is visible below the fold on a standard desktop screen. Caught a real bug during verification: the new section's class="merger-notice" had been left off the actual <section> tag (only data-section was set), so the CSS silently matched nothing and it rendered transparent with generic 48px padding instead of the specified #fafafa/24px — caught via computed-style check (backgroundColor was rgba(0,0,0,0), not rgb(250,250,250)), not just a visual glance."
+    - at: "2026-08-10T22:00:00Z"
+      what: "Merger notice made a distinct full-bleed band: background changed from --color-surface (#fafafa) to --color-accent-green (#e9fbf7, existing captured-palette token, no new value invented) since the prior off-white was too close to the surrounding sections' tone to register as its own section. Sits with zero gap directly below the hero (no CSS change needed for the adjacency — sections are plain block siblings with no margin; the earlier 'gap' was a background-contrast illusion, not a spacing bug). Content still constrained to .wrap container width. Removed class="surface-alt" from the quick-access section wrapper so it reverts to plain white — with the merger notice now visibly distinct, the off-white quick-access wrapper read as a redundant second off-white zone and made the combined padding look oversized; its padding (--space-xxl, 48px) was already the same generic value every other section uses, confirmed via computed-style check rather than adjusted. Verified via computed styles: .merger-notice backgroundColor rgb(233,251,247), padding-block 24px, 0px gap to hero bottom; quick-access backgroundColor rgba(0,0,0,0), padding-block 48px."
   critique:
     method: "DEGRADED single-context (no sub-agent Task tool orchestration used this pass; assessed inline against the direction brief and the a11y/hierarchy fixes it named)"
     verdict: "pass, 0 P0/P1"
@@ -156,21 +160,26 @@ header[data-section="header"] { border-bottom: 1px solid var(--color-border); ba
 
 main { display: block; }
 
-/* hero */
-section[data-section="hero"] { position: relative; min-height: 560px; display: flex; align-items: center; background: #0b1220; }
+/* hero — capped height (was min-height:560px, filled almost the full viewport)
+   so the section below is visibly present on a standard desktop screen */
+section[data-section="hero"] { position: relative; min-height: 420px; max-height: 62vh; display: flex; align-items: center; background: #0b1220; }
 section[data-section="hero"] .hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.92; }
 section[data-section="hero"] .hero-scrim { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,13,110,0.55) 0%, rgba(0,13,110,0.15) 55%, rgba(0,13,110,0) 75%); }
 .hero-card { position: relative; z-index: 2; background: var(--color-background); border-radius: var(--radius-md); padding: var(--space-xl); max-width: 560px; margin: var(--space-xl); }
-/* merger-banner: DEMOTED secondary/notice treatment — a time-limited announcement,
-   not a permanent brand promise, so it must read with less visual weight than the
-   H1/lede/primary CTA above it. Thin left rule instead of a filled surface block;
-   regular-weight text; outline (not solid-fill) button. */
-.merger-banner { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-xs) var(--space-md); border-left: 3px solid var(--color-border); padding: var(--space-xs) 0 var(--space-xs) var(--space-md); margin: var(--space-sm) 0 var(--space-lg); }
-.merger-banner p { margin: 0; font-weight: 400; font-size: 14px; color: var(--color-primary); max-width: none; flex: 1 1 auto; }
-.btn-banner { display: inline-flex; align-items: center; background: var(--color-background); color: var(--color-primary); border: 1px solid var(--color-primary); border-radius: var(--radius-sm); padding: 6px 14px; font-size: 13px; font-weight: 400; text-decoration: none; white-space: nowrap; flex-shrink: 0; }
-.btn-banner:hover { background: var(--color-surface); }
 .hero-card .lede { color: var(--color-primary); }
 .hero-cta-row { display: flex; gap: var(--space-sm); flex-wrap: wrap; margin-top: var(--space-lg); }
+
+/* merger notice strip — moved OUT of the hero card entirely (it was reading as a
+   second, generic message competing with the hero). Plain one-line notice: no
+   icon, no border rule, no button — just body-size navy text with an inline
+   underlined link, on the off-white surface tone, full width. */
+/* full-bleed distinct band, not a strip floating on a near-white background —
+   accent-green from the captured palette; sits flush against the hero (sections
+   are block-level siblings with no default margin, so no gap-closing rule is
+   needed beyond not adding one) */
+.merger-notice { background: var(--color-accent-green); padding-block: var(--space-lg); }
+.merger-notice p { margin: 0; max-width: none; color: var(--color-primary); font-size: var(--size-body); }
+.merger-notice a { color: var(--color-primary); text-decoration: underline; }
 
 /* generic section rhythm */
 section { padding-block: var(--space-xxl); }
@@ -384,10 +393,6 @@ footer[data-section="footer"] { background: var(--color-primary); color: #fff; p
     <div class="hero-scrim" aria-hidden="true"></div>
     <div class="hero-card">
       <h1>Mehr als eine Versicherung</h1>
-      <div class="merger-banner">
-        <p>Helvetia und Baloise sind jetzt eins.</p>
-        <a class="btn-banner" href="https://www.helvetia.com/ch/web/de/ueber-uns/zusammenschluss.html">Was der Zusammenschluss für Sie bedeutet</a>
-      </div>
       <p class="lede">Helvetia – Ihre verlässliche Partnerin für alle Finanzfragen.</p>
       <div class="hero-cta-row">
         <a class="btn btn-primary" href="https://www.helvetia.com/ch/web/de/ueber-uns/helvetia-schweiz.html">Mehr über Helvetia erfahren</a>
@@ -395,7 +400,13 @@ footer[data-section="footer"] { background: var(--color-primary); color: #fff; p
     </div>
   </section>
 
-  <section data-section="quick-access" data-intent="navigate" data-layout="tile-grid-6" data-items="6" class="surface-alt">
+  <section class="merger-notice" data-section="merger-notice" data-intent="inform" data-layout="text-line" data-items="1">
+    <div class="wrap">
+      <p>Helvetia und Baloise sind jetzt eins. <a href="https://www.helvetia.com/ch/web/de/ueber-uns/zusammenschluss.html">Was der Zusammenschluss für Sie bedeutet</a></p>
+    </div>
+  </section>
+
+  <section data-section="quick-access" data-intent="navigate" data-layout="tile-grid-6" data-items="6">
     <div class="wrap">
       <div class="section-head">
         <h2>Wir sind für Sie da.</h2>

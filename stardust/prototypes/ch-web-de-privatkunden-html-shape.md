@@ -55,32 +55,46 @@ dominantDimension: ia-priority/merger-message-promotion
    promise (per the zusammenschluss.html page's own framing: new
    identity, same partner), not a stale tagline, so it stays H1. The
    merger fact is elevated from a *dismissible* 12px strip to a
-   *persistent, non-dismissible* banner directly beneath H1 — a real
-   structural improvement over the original site, short of replacing
-   the headline. Full-bleed photo ground (same captured image: mother
-   lifting child, `pages/ch-web-de-privatkunden-html.json#media.imgs[1]`,
-   `startseite.jpg`), white overlay card, left-anchored.
+   *persistent, non-dismissible* line — a real structural improvement
+   over the original site, short of replacing the headline. Full-bleed
+   photo ground (same captured image: mother lifting child,
+   `pages/ch-web-de-privatkunden-html.json#media.imgs[1]`,
+   `startseite.jpg`), white overlay card, left-anchored. **Corrected
+   2026-08-10 (final): the merger notice is no longer inside the hero
+   card at all** — an intermediate version demoted it to a smaller
+   in-card treatment (thin left rule, outline button), but that still
+   read as a second message splitting the hero's attention. Moved out
+   entirely: the hero card now contains only H1 + lede + the single
+   primary CTA, and the merger fact lives in its own full-width notice
+   strip directly below (§ Sections item 2b). **Hero height capped**
+   (was `min-height:560px`, filled nearly the full viewport at common
+   desktop heights): now `min-height:420px; max-height:62vh`, so the
+   next section is visibly present on a standard desktop screen
+   without scrolling.
    - **H1**: "Mehr als eine Versicherung" — captured verbatim
-     (`pages/...#headings[0]`), restored to its original position.
-   - **Merger banner** (persistent, no dismiss/close control):
-     "Helvetia und Baloise sind jetzt eins." (`pages/...#body[0]`,
-     captured verbatim) paired with CTA "Was der Zusammenschluss für
-     Sie bedeutet" → `/ch/web/de/ueber-uns/zusammenschluss.html`
-     (registry label, `DESIGN.json#extensions.ctaLabelRegistry`).
-     **Corrected 2026-08-10**: demoted to a secondary/notice
-     treatment — thin left rule instead of a filled surface block,
-     regular-weight 14px text, outline (not solid-fill) button. It's a
-     time-limited announcement, not a permanent brand promise, so it
-     must read with visibly less weight than the H1/lede/primary CTA
-     above it; the earlier build gave it primary-CTA-level visual
-     force, which overstated it relative to the restored H1.
+     (`pages/...#headings[0]`).
    - **Lede**: "Helvetia – Ihre verlässliche Partnerin für alle
-     Finanzfragen." — captured verbatim, restored to its original
-     position beneath the banner.
+     Finanzfragen." — captured verbatim.
    - **CTA**: "Mehr über Helvetia erfahren" →
      `/ch/web/de/ueber-uns/helvetia-schweiz.html` (registry label;
-     this is the original hero's own captured CTA, restored to
-     primary position).
+     the original hero's own captured CTA).
+
+2b. **merger notice** (new section, added 2026-08-10; **corrected
+    2026-08-10, round 9**) — its own distinct full-bleed band directly
+    below the hero, zero gap (sections are plain block siblings with
+    no margin, so removing the intermediate gap was a no-op — the
+    section-order adjacency already produced flush stacking).
+    `--color-accent-green` (#e9fbf7, captured palette) background,
+    replacing the initial `--color-surface` (#fafafa) treatment — the
+    off-white was too close to the surrounding sections' tone to read
+    as its own section. Content stays constrained to the container
+    width (`.wrap`), `--space-lg` vertical padding top and bottom. One
+    line of body-size (16px) navy text: "Helvetia und Baloise sind
+    jetzt eins." (`pages/...#body[0]`, captured verbatim) followed
+    inline by the underlined navy link "Was der Zusammenschluss für
+    Sie bedeutet" → `/ch/web/de/ueber-uns/zusammenschluss.html`
+    (registry label). No icon, no border rule, no button, left-aligned
+    to the container.
 
 3. **quick-access** ("Wir sind für Sie da.") — **corrected 2026-08-10**:
    originally miscaptured and rendered as an empty "product-finder
@@ -91,10 +105,18 @@ dominantDimension: ia-priority/merger-message-promotion
    descriptions/hrefs, captured verbatim in `ctas[]` and `body[18]`).
    4 accent-tiles (Schaden melden/green, Prämie berechnen/purple,
    Kontakt aufnehmen/yellow, Online-Services nutzen/red) + 2 plain
-   tiles (E-Banking, Kundenportal) below on the off-white surface. See
-   `DESIGN.json` accent-family scope note — this is a **third**
-   confirmed deployment surface for the reserved pastel accents
-   (stat tiles, service tiles, and now quick-access tiles).
+   tiles (E-Banking, Kundenportal) below. See `DESIGN.json`
+   accent-family scope note — this is a **third** confirmed deployment
+   surface for the reserved pastel accents (stat tiles, service tiles,
+   and now quick-access tiles). **Corrected 2026-08-10, round 9**: the
+   section wrapper's own background reverted from the off-white
+   `surface-alt` tone to plain white — with the merger notice above it
+   now a distinct accent-green band, the off-white section wrapper
+   read as a second, redundant "distinct section" cue and produced an
+   oversized-looking blank zone between the two off-white-toned
+   sections. The two plain tiles (E-Banking, Kundenportal) keep their
+   own off-white card background independently of the section
+   wrapper.
 
 4. **FAQ band** ("Ihre Fragen – unsere Antworten") — unchanged
    composition. Heading + "Helvetia und Baloise sind jetzt eins. Was
@@ -261,6 +283,7 @@ dominantDimension: ia-priority/merger-message-promotion
 
 - `header[data-section="header"][data-intent="navigate"][data-layout="two-row"]`
 - `section[data-section="hero"][data-intent="brand-statement"][data-layout="split-photo-overlay"][data-items="2"]`
+- `section[data-section="merger-notice"][data-intent="inform"][data-layout="text-line"][data-items="1"]`
 - `section[data-section="quick-access"][data-intent="navigate"][data-layout="tile-grid-6"][data-items="6"]`
 - `section[data-section="faq-band"][data-intent="inform"][data-layout="text-image-split"][data-items="1"]`
 - `section[data-section="vorsorge-teaser"][data-intent="inform"][data-layout="text-image-split"][data-items="1"]`
