@@ -5,6 +5,24 @@ up to date as work proceeds. Reverse-chronological.
 
 ---
 
+## 2026-08-10 — Audience switcher: filled pill replaced with the live tab pattern
+
+The Privatkunden/Unternehmen switcher was rendering as a filled navy
+pill on the active item (`background: var(--color-primary); color:
+#fff`, `border-radius: var(--radius-pill)`) — a button treatment. The
+live site uses tabs: navy text on both, active tab marked with a navy
+underline, inactive tab plain. Replaced the pill CSS with `border-
+bottom: 2px solid transparent`, transparent on the inactive link and
+`var(--color-primary)` on `[aria-current="page"]`; both links now sit
+at `background: transparent` and `border-radius: 0`. No HTML change
+needed — `aria-current="page"` was already correctly set on the active
+link. Verified via computed styles: active tab `borderBottomColor: rgb(0,
+13, 110)`, inactive `borderBottomColor: rgba(0, 0, 0, 0)`, both
+`backgroundColor: rgba(0, 0, 0, 0)` and `borderRadius: 0px`. Full
+verification suite re-run: comment/charset integrity, main-landmark
+count (1), zero accessible-name gaps, no horizontal overflow at any of
+the 7 target viewports.
+
 ## 2026-08-10 — Merger notice made its own distinct band; quick-access reverted to white
 
 The merger notice (added earlier the same day, see entry below) still
