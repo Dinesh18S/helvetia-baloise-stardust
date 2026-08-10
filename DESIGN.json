@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-10T13:00:00Z",
+  "title": "Design System: Helvetia (target direction)",
+  "extensions": {
+    "colorMeta": {
+      "primary": { "role": "primary", "displayName": "Helvetia Navy", "canonical": "#000d6e" },
+      "background": { "role": "neutral", "displayName": "White", "canonical": "#ffffff" },
+      "surface": { "role": "neutral", "displayName": "Off-white", "canonical": "#fafafa" },
+      "border": { "role": "neutral", "displayName": "Light Grey", "canonical": "#e8e8e8" },
+      "accent-yellow": { "role": "accent", "displayName": "Pale Yellow", "canonical": "#fff9e8" },
+      "accent-purple": { "role": "accent", "displayName": "Pale Purple", "canonical": "#f9f3ff" },
+      "accent-green": { "role": "accent", "displayName": "Pale Green", "canonical": "#e9fbf7" },
+      "accent-red": { "role": "accent", "displayName": "Pale Red/Pink", "canonical": "#ffeef1", "note": "Confirmed live in the privatkunden service-tile row per user correction (2026-08-10); original crawl sampled 0 occurrences with visible area. See direction.md § Gaps and questions." }
+    },
+    "typographyMeta": {
+      "h1": { "displayName": "H1 (38px)", "purpose": "top of the modular scale — hero headline, page title" },
+      "h2": { "displayName": "H2 (30px, new)", "purpose": "major section headings — now visually distinct from H1" },
+      "h3": { "displayName": "H3 (24px)", "purpose": "sub-section headings" },
+      "body": { "displayName": "Body (16px)", "purpose": "paragraph copy — readability floor, independent of the heading ratio chain" }
+    },
+    "shadows": [],
+    "motion": {},
+    "breakpoints": [
+      { "name": "tablet", "value": "769px" },
+      { "name": "desktop", "value": "1024px" },
+      { "name": "high-definition", "value": "1280px" },
+      { "name": "widescreen", "value": "1440px" },
+      { "name": "fullhd", "value": "1920px" }
+    ],
+    "componentStyle": {
+      "buttons": {
+        "primary": { "background": "#000d6e", "color": "#ffffff", "borderRadius": "4px", "padding": "16px 24px", "fontWeight": 400, "border": "2px solid #000d6e", "shadow": "none" },
+        "secondary": { "background": "#ffffff", "color": "#000d6e", "borderRadius": "4px", "padding": "16px 24px", "fontWeight": 400, "border": "2px solid #000d6e", "shadow": "none" }
+      },
+      "cards": { "background": "#ffffff", "borderRadius": "12px", "shadow": "none", "border": "none" },
+      "carouselControl": { "shape": "circle", "size": "40px", "background": "#000d6e", "color": "#ffffff", "position": "vertical-center, outside clip boundary where space allows", "accessibleNamePattern": "Vorherige Karte / Nächste Karte" }
+    },
+    "systemComponentRoles": {
+      "site-header": { "purpose": "persistent nav, language + audience switcher", "position": "top, all pages", "a11yRequirement": "single main landmark begins immediately after this region" },
+      "site-footer": { "purpose": "legal links, sitemap", "position": "bottom, all pages" },
+      "merger-message": {
+        "purpose": "states the Helvetia/Baloise merger fact",
+        "position": "PROMOTED: primary hero position (was: 12px dismissible strip above the hero)",
+        "scope": "site-wide",
+        "rationale": "user-directed: 'the most consequential fact the company has communicated in a decade' — a deliberate IA-priority promotion, not a preservation of the status quo"
+      }
+    },
+    "ctaLabelRegistry": {
+      "purpose": "Resolves T-cta-vocab: nine identical 'Mehr erfahren' instances become destination-specific labels. Keyed by link target so the same destination always reads the same label wherever it appears — a naming convention, not per-page content.",
+      "rule": "No two links with different hrefs may share visible text on the same page.",
+      "entries": [
+        { "href": "/ch/web/de/ueber-uns/helvetia-schweiz.html", "label": "Mehr über Helvetia erfahren", "observedOn": ["ch-web-de-privatkunden-html", "ch-web-de-geschaeftskunden-html"] },
+        { "href": "/ch/web/de/ueber-uns/zusammenschluss.html", "label": "Was der Zusammenschluss für Sie bedeutet", "observedOn": ["ch-web-de-privatkunden-html", "ch-web-de-ueber-uns-helvetia-schweiz-html"] },
+        { "href": "/ch/web/fr/notre-profil/helvetia-suisse.html", "label": "En savoir plus sur Helvetia", "observedOn": ["ch-web-fr-personnes-privees-html"], "note": "French equivalent of the helvetia-schweiz.html entry; label independently derived, not translated mechanically" },
+        { "href": "/ch/web/fr/notre-profil/fusion.html", "label": "Ce que signifie la fusion pour vous", "observedOn": ["ch-web-fr-personnes-privees-html"], "note": "French equivalent of the zusammenschluss.html entry" },
+        { "href": "/corporate/hb/de/home/investoren/publikationen/fusionsunterlagen.html", "label": "Zu den Fusionsunterlagen", "observedOn": ["index"], "note": "corporate/group page — out of primary redesign scope, included for completeness since the same registry applies wherever the link recurs" },
+        { "href": "/corporate/hb/de/home/investoren/investor-relations.html", "label": "Zu Investor Relations", "observedOn": ["index"] },
+        { "href": "/corporate/hb/de/home/ueber-uns/karriere.html", "label": "Offene Stellen entdecken", "observedOn": ["index"] },
+        { "href": "/corporate/hb/de/home/ueber-uns/angebot/versicherungen.html", "label": "Unser Versicherungsangebot entdecken", "observedOn": ["index"] },
+        { "href": "/corporate/hb/de/home/news-stories/publikationen/medienmitteilungen.html", "label": "Alle Medienmitteilungen lesen", "observedOn": ["index"] }
+      ]
+    },
+    "voice": {
+      "heroHeadline": "Mehr als eine Versicherung",
+      "heroLede": "Helvetia – Ihre verlässliche Partnerin für alle Finanzfragen.",
+      "primaryCTALabel": "Mehr erfahren (superseded — see ctaLabelRegistry)",
+      "tone": "professional-warm — direct second-person address, unchanged from current state",
+      "dos": ["Address the reader as 'Sie' directly", "Name every link's destination specifically"],
+      "donts": ["Do not reuse 'Mehr erfahren' for two different destinations on one page"]
+    },
+    "iaPriorities": [
+      {
+        "signal": "audience-routing",
+        "evidence": "pages/ch-web-de-privatkunden-html.json#ctas — 'Privatkunden' + 'Unternehmen' audience switcher rendered above the fold on every page",
+        "preserveAs": "first-viewport (header)",
+        "scope": "site-wide",
+        "mutability": "movable"
+      },
+      {
+        "signal": "merger-message (promoted, not merely preserved)",
+        "evidence": "pages/ch-web-de-privatkunden-html.json#body[0] — 'Helvetia und Baloise sind jetzt eins. Mehr dazu', currently rendered as a small dismissible strip above the hero, per direction brief 'the most consequential fact the company has communicated in a decade'",
+        "preserveAs": "first-viewport (primary hero position)",
+        "scope": "site-wide",
+        "mutability": "movable",
+        "note": "This is a user-directed elevation of the priority's rendered position, not a default preservation — see systemComponentRoles.merger-message"
+      }
+    ],
+    "divergence": {
+      "mode": "A (brand-faithful)",
+      "signalClassification": "signal-strong",
+      "rebrandTriggered": false,
+      "seed": {
+        "rolled": false,
+        "reason": "User brief is execution-refinement only (accessibility, hierarchy, IA-promotion) with an explicit 'keep as system' list covering palette, type family, flat surfaces, and register. Rolling an unrequested decade/craft/ground-family seed would contradict the brief's own constraint against inventing brand moves. Decade, craft, and ground-family are held at their captured/current values rather than rolled."
+      },
+      "font_deck": { "name": "brand-inherited", "picked_by": "user-constraint" },
+      "palette": { "source": "inherited from stardust/current/_brand-extraction.json", "picked_by": "user-constraint", "widened_by": "user correction — accent-red confirmed live in service-tile row" },
+      "ground_family": { "value": "stark-white (#ffffff)", "override": { "reason": "brand-faithful" } },
+      "anti_toolbox_audit": {
+        "hits": 0,
+        "note": "No agent-default reflexes introduced — every move in this direction is either an inherited value or a mechanical derivation from captured evidence (H2 size, CTA labels, fallback stacks)."
+      },
+      "brand_faithful_inversions": [
+        "#ffffff retained as page ground (existing brand decision; #fff is canonical for Helvetia). The 'no pure white' impeccable rule is inverted per brand-faithful direction.",
+        "Color tokens retained in hex format (matches captured brand surface and DESIGN.md Stitch frontmatter convention). OKLCH applies to new authoring; this is inheritance.",
+        "Saturated #000d6e retained as the primary brand color and as the default text color (existing brand uses it as the canonical voice, dual-role). The agent-default reflex toward tinted-neutral primaries or a separate text-gray is inverted per brand-faithful direction.",
+        "The four pastel accent tones (#fff9e8, #f9f3ff, #e9fbf7, #ffeef1) retained as reserved colors for the stat-tile and service-tile surfaces only (T-PALETTE resolution: keep, don't expand). The agent-default reflex to either spread accent colors across the system or reject a 4-hue accent family as too many is inverted here — see DESIGN.md § The Two-Tile Rule."
+      ]
+    }
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Navy-filled CTA button. Unchanged shape from current state; now requires a destination-specific accessible name.",
+      "html": "<a class=\"ds-btn-primary\" href=\"/ch/web/de/ueber-uns/zusammenschluss.html\">Was der Zusammenschluss für Sie bedeutet</a>",
+      "css": ".ds-btn-primary { display: inline-block; background: #000d6e; color: #ffffff; border: 2px solid #000d6e; border-radius: 4px; padding: 16px 24px; font-family: BaloiseText, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-weight: 400; text-decoration: none; }"
+    },
+    {
+      "name": "Carousel Control",
+      "kind": "custom",
+      "refersTo": "carouselControl",
+      "description": "New component: visible prev/next affordance for card strips. Resolves the mid-word clipping issue.",
+      "html": "<button class=\"ds-carousel-next\" aria-label=\"Nächste Karte\">›</button>",
+      "css": ".ds-carousel-next { width: 40px; height: 40px; border-radius: 9999px; background: #000d6e; color: #ffffff; border: none; font-size: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; }"
+    },
+    {
+      "name": "Stat / Service Tile",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Pastel-background tile, four-up row. Now confirmed deployed in two roles: stat tiles ('Wir sind Helvetia') and service tiles (privatkunden service row, pale red/pink confirmed live).",
+      "html": "<div class=\"ds-tile ds-tile--pink\"><strong>Privathaftpflicht</strong><span>Gelassen bleiben, auch wenn etwas schief geht</span></div>",
+      "css": ".ds-tile { border-radius: 12px; padding: 24px; color: #000d6e; font-family: BaloiseText, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; } .ds-tile--pink { background: #ffeef1; } .ds-tile strong { display: block; font-family: BaloiseBold, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; margin-bottom: 8px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": null,
+    "overview": "Brand-faithful accessibility and hierarchy refresh — not a rebrand. See DESIGN.md Overview.",
+    "keyCharacteristics": [
+      "One dominant brand color (#000d6e) carrying both text and action roles — unchanged",
+      "Flat surfaces at rest — unchanged",
+      "Four pastel accents reserved to stat/service tiles only — unchanged scope, confirmed second deployment",
+      "Modular type scale (38/30/24, major-third) replacing the ad-hoc 38/38/24/16 — the one structural token change"
+    ],
+    "rules": [
+      { "name": "The One-Navy Rule", "body": "#000d6e stays both default text and primary action color. No neutral text-grey.", "section": "colors" },
+      { "name": "The Two-Tile Rule", "body": "The four pastel accents are reserved to stat tiles and service tiles only.", "section": "colors" },
+      { "name": "The Distinct-Step Rule", "body": "No two adjacent heading levels may compute to the same rendered size.", "section": "typography" }
+    ],
+    "dos": [
+      "Do keep #000d6e as both the default text color and the primary action color",
+      "Do keep the four pastel accents reserved to stat tiles and service tiles",
+      "Do give every heading level a visually distinct size",
+      "Do give every interactive element a programmatically discoverable, destination-specific accessible name",
+      "Do wrap primary content in exactly one main landmark",
+      "Do give carousels a visible, operable prev/next affordance"
+    ],
+    "donts": [
+      "Don't introduce a neutral-gray body-text color",
+      "Don't expand the pastel accent family beyond stat/service tiles",
+      "Don't add shadow usage the live site doesn't already have",
+      "Don't reuse identical CTA text for two links pointing at different destinations on the same page",
+      "Don't invent a logo variant, font weight, color, or customer/pricing number not present in the captured evidence"
+    ]
+  }
+}

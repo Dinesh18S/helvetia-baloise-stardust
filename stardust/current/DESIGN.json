@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-10T11:55:00Z",
+  "title": "Design System: Helvetia (current state)",
+  "extensions": {
+    "colorMeta": {
+      "primary": { "role": "primary", "displayName": "Helvetia Navy", "canonical": "#000d6e" },
+      "background": { "role": "neutral", "displayName": "White", "canonical": "#ffffff" },
+      "surface": { "role": "neutral", "displayName": "Off-white", "canonical": "#fafafa" },
+      "border": { "role": "neutral", "displayName": "Light Grey", "canonical": "#e8e8e8" },
+      "accent-yellow": { "role": "accent", "displayName": "Pale Yellow", "canonical": "#fff9e8" },
+      "accent-purple": { "role": "accent", "displayName": "Pale Purple", "canonical": "#f9f3ff" },
+      "accent-green": { "role": "accent", "displayName": "Pale Green", "canonical": "#e9fbf7" },
+      "accent-red": { "role": "accent", "displayName": "Pale Red/Pink", "canonical": "#ffeef1" }
+    },
+    "typographyMeta": {
+      "heading": { "displayName": "Heading (BaloiseBold)", "purpose": "H1/H2 — hero headline and major section headings" },
+      "subheading": { "displayName": "Subheading (BaloiseBold, 24px)", "purpose": "H3 — sub-section headings" },
+      "body": { "displayName": "Body (BaloiseText)", "purpose": "paragraph copy" }
+    },
+    "shadows": [
+      { "name": "header", "value": "0 4px 4px 0 rgba(0,7,57,0.15)", "purpose": "site header (token defined; not confirmed visibly deployed)" },
+      { "name": "small", "value": "0px 2px 5px 1px rgba(0,7,57,0.12)", "purpose": "small elevation" },
+      { "name": "normal", "value": "0 0 10px 0 rgba(0,7,57,0.15)", "purpose": "normal elevation" },
+      { "name": "large", "value": "0 0 30px 0 rgba(0,7,57,0.15)", "purpose": "modal/overlay elevation" }
+    ],
+    "motion": [],
+    "breakpoints": [
+      { "name": "tablet", "value": "769px" },
+      { "name": "desktop", "value": "1024px" },
+      { "name": "high-definition", "value": "1280px" },
+      { "name": "widescreen", "value": "1440px" },
+      { "name": "fullhd", "value": "1920px" }
+    ],
+    "componentStyle": {
+      "buttons": {
+        "primary": { "background": "#000d6e", "color": "#ffffff", "borderRadius": "4px", "padding": "16px 24px", "fontWeight": 400, "border": "2px solid #000d6e", "shadow": "none" },
+        "secondary": { "background": "#ffffff", "color": "#000d6e", "borderRadius": "4px", "padding": "16px 24px", "fontWeight": 400, "border": "2px solid #000d6e", "shadow": "none" }
+      },
+      "cards": { "background": "#ffffff", "borderRadius": "12px", "shadow": "none", "border": "none" }
+    },
+    "motifs": {
+      "borderRadius": { "primary": "4px", "secondary": "12px", "pill": "9999px" },
+      "patterns": [
+        "hero-with-image",
+        "card-grid",
+        "stat-row",
+        "cta-band",
+        "article-teaser-strip"
+      ]
+    },
+    "voice": {
+      "heroHeadline": "Mehr als eine Versicherung",
+      "heroLede": "Helvetia – Ihre verlässliche Partnerin für alle Finanzfragen.",
+      "primaryCTALabel": "Mehr erfahren",
+      "ctaSamples": ["Mehr erfahren", "Mehr dazu", "Jetzt Check starten", "Zur Kontaktübersicht", "Alle Versicherungen"],
+      "tone": "professional-warm — short declarative sentences, direct second-person address, formal insurer register paired with warm lifestyle photography"
+    }
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Navy-filled CTA button, used for the hero primary action and section CTAs.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\">Mehr erfahren</a>",
+      "css": ".ds-btn-primary { display: inline-block; background: #000d6e; color: #ffffff; border: 2px solid #000d6e; border-radius: 4px; padding: 16px 24px; font-family: BaloiseText, sans-serif; font-weight: 400; text-decoration: none; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "White-filled outline variant, same shape and padding as primary, inverted fill.",
+      "html": "<a class=\"ds-btn-secondary\" href=\"#\">Mehr dazu</a>",
+      "css": ".ds-btn-secondary { display: inline-block; background: #ffffff; color: #000d6e; border: 2px solid #000d6e; border-radius: 4px; padding: 16px 24px; font-family: BaloiseText, sans-serif; font-weight: 400; text-decoration: none; }"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "White rounded card used for insurance-category tiles and article teasers.",
+      "html": "<div class=\"ds-card\"><h3>Autoversicherung</h3><p>Maximale Sicherheit für Ihr Auto</p></div>",
+      "css": ".ds-card { background: #ffffff; border-radius: 12px; color: #000d6e; padding: 24px; }"
+    },
+    {
+      "name": "Stat Tile",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Pastel-background numeral tile, four-up row, signature component ('Wir sind Helvetia').",
+      "html": "<div class=\"ds-stat-tile\"><strong>2 Mio.+</strong><span>Kundinnen und Kunden vertrauen uns in der Schweiz</span></div>",
+      "css": ".ds-stat-tile { background: #f9f3ff; border-radius: 12px; padding: 24px; color: #000d6e; font-family: BaloiseText, sans-serif; } .ds-stat-tile strong { display: block; font-family: BaloiseBold, sans-serif; font-size: 32px; margin-bottom: 8px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": null,
+    "overview": "Descriptive current-state record only — no creative direction is asserted. See DESIGN.md Overview.",
+    "keyCharacteristics": [
+      "One dominant brand color (#000d6e) carrying both text and action roles",
+      "Flat surfaces at rest; shadow tokens defined but not visibly deployed",
+      "Four-color pastel family reserved for stat/number tiles only",
+      "Ad-hoc type scale (38px / 24px / 16px), not a single modular ratio"
+    ],
+    "rules": [
+      { "name": "The One-Navy Rule", "body": "The site does not separate text-gray from brand-blue — #000d6e is both. Introducing a distinct neutral-text-gray is a deliberate departure from the current system.", "section": "colors" },
+      { "name": "The No-System-Fallback Rule", "body": "Computed font-family reports no fallback stack after BaloiseBold/BaloiseText — font-load failure is an open, uncaptured risk.", "section": "typography" }
+    ],
+    "dos": [
+      "Do keep #000d6e as both the default text color and the primary action color",
+      "Do reserve the four pastel accent tones for stat/number tiles, matching current usage",
+      "Do treat French as a genuine layout stress test — personnes-privees copy runs measurably longer than German"
+    ],
+    "donts": [
+      "Don't introduce a separate neutral-gray body-text color as a cleanup",
+      "Don't assume shadow tokens are load-bearing; none render visibly on the crawled pages",
+      "Don't invent pricing, coverage terms, or customer/rating numbers not already present in the captured copy"
+    ]
+  }
+}

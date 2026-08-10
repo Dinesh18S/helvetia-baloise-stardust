@@ -1,0 +1,335 @@
+{
+  "_provenance": {
+    "writtenBy": "stardust:extract",
+    "writtenAt": "2026-08-10T11:50:00Z",
+    "readArtifacts": [
+      "stardust/current/pages/ch-web-de-privatkunden-html.json",
+      "stardust/current/pages/ch-web-de-geschaeftskunden-html.json",
+      "stardust/current/pages/ch-web-de-ueber-uns-helvetia-schweiz-html.json",
+      "stardust/current/pages/ch-web-fr-personnes-privees-html.json",
+      "stardust/current/pages/index.json",
+      "stardust/current/_style-capture/*.json (supplementary live Playwright pass for computed typography, logo, favicon, radius/shadow, palette samples — crawl.mjs's reference capture() does not read computed style)"
+    ],
+    "synthesizedInputs": [],
+    "stardustVersion": "0.18.1",
+    "notes": [
+      "Font family names (BaloiseBold, BaloiseText, BaloiseMedium) are read verbatim from computed getComputedStyle(el).fontFamily and @font-face rules on the live site — not chosen by the agent. They reflect the merged Helvetia/Baloise identity referenced in the site's own banner copy ('Helvetia und Baloise sind jetzt eins').",
+      "index.json (helvetia.com root, redirected to helvetia-baloise.com) captured a blocking country/language-selector modal, not the corporate homepage content. Excluded from cross-page aggregation as unreliable; kept in current/pages/ for audit trail only. See _crawl-log.json#visionCheck.",
+      "Cookie-consent banner remained visibly rendered in 2/5 screenshots (geschaeftskunden, ueber-uns) — consent dismissal is per-browser-context and this crawl ran concurrency=4. The banner's own text is still correctly excluded from headings/body/ctas by the INTERSTITIAL filter (see per-page _signals.filteredInterstitials), so this is a screenshot-only artifact, not a data-quality issue.",
+      "A product-finder/calculator widget renders as an empty mint-green placeholder box on privatkunden, geschaeftskunden and personnes-privees screenshots — a client-side widget whose content did not resolve within the capture wait window. Its visual footprint (rounded card, mint background) is real; its content is opaque to this extraction.",
+      "Palette hex values for the accent family are read from the site's own CSS custom-property design-token sheet (558 --helvetia-* tokens) cross-checked against sampled computed backgroundColor/color across all 5 pages; both sources agree."
+    ]
+  },
+  "site": {
+    "name": "Helvetia",
+    "tagline": "Mehr als eine Versicherung",
+    "originUrl": "https://www.helvetia.com"
+  },
+  "origins": [
+    {
+      "origin": "https://www.helvetia.com",
+      "role": "primary",
+      "pagesCaptured": 5,
+      "contributedSignals": []
+    }
+  ],
+  "logo": {
+    "source": "img",
+    "sourceSelector": "header img[class*=logo]",
+    "localPath": "stardust/current/assets/logo.svg",
+    "format": "svg",
+    "intrinsicWidth": 300,
+    "intrinsicHeight": 56,
+    "synthesized": false,
+    "synthesizedBasis": null,
+    "liveSrc": "https://www.helvetia.com/content/dam/os/ch/web/assets/graphics-and-icons/system/logo/helvetia-logo-rgb.svg"
+  },
+  "favicon": {
+    "localPath": "stardust/current/assets/favicon.ico",
+    "liveSrc": "https://www.helvetia.com/content/dam/os/ch/web/assets/graphics-and-icons/system/logo/helvetia-favicon-rgb-blue-neg.ico",
+    "format": "ico"
+  },
+  "palette": [
+    {
+      "role": "background",
+      "value": "#ffffff",
+      "occurrences": 42987387,
+      "sourceSelectors": ["body", "main", "section"],
+      "usedAs": ["background"]
+    },
+    {
+      "role": "surface",
+      "value": "#fafafa",
+      "occurrences": 36547843,
+      "sourceSelectors": ["--helvetia-color-grey-1", "section.alt"],
+      "usedAs": ["background"]
+    },
+    {
+      "role": "primary",
+      "value": "#000d6e",
+      "occurrences": 212947388,
+      "sourceSelectors": ["--helvetia-color-primary", "--helvetia-color-text-primary", "--helvetia-color-background-primary", "h1", "h2", "a", ".button-primary"],
+      "sources": ["ch-web-de-privatkunden-html", "ch-web-de-geschaeftskunden-html", "ch-web-de-ueber-uns-helvetia-schweiz-html"],
+      "usedAs": ["text", "background", "border"],
+      "note": "Dual role: this is both the dominant text color site-wide (near-black-navy body copy) AND the brand primary used for buttons, the contact band section, and the footer background."
+    },
+    {
+      "role": "border",
+      "value": "#e8e8e8",
+      "occurrences": 295920,
+      "sourceSelectors": ["--helvetia-color-grey-3", "--helvetia-color-border-grey", ".card", "input"],
+      "usedAs": ["background", "border"]
+    },
+    {
+      "role": "accent-yellow",
+      "value": "#fff9e8",
+      "occurrences": 650286,
+      "sourceSelectors": ["--helvetia-color-background-yellow-light", ".stat-tile"],
+      "usedAs": ["background"]
+    },
+    {
+      "role": "accent-purple",
+      "value": "#f9f3ff",
+      "occurrences": 88164,
+      "sourceSelectors": ["--helvetia-color-purple-1", ".stat-tile"],
+      "usedAs": ["background"]
+    },
+    {
+      "role": "accent-green",
+      "value": "#e9fbf7",
+      "occurrences": 88164,
+      "sourceSelectors": ["--helvetia-color-background-green-light", ".stat-tile"],
+      "usedAs": ["background"]
+    },
+    {
+      "role": "accent-red",
+      "value": "#ffeef1",
+      "occurrences": 0,
+      "sourceSelectors": ["--helvetia-color-background-red-light"],
+      "usedAs": ["background"],
+      "note": "Present in the site's own design-token sheet (semantic 'danger/promo' light background) but not sampled with visible area on the 5 crawled pages; included for completeness, not from direct pixel evidence."
+    }
+  ],
+  "type": {
+    "headingFamily": {
+      "name": "BaloiseBold",
+      "stack": "BaloiseBold",
+      "weights": [700],
+      "sizes": ["38px", "24px"],
+      "lineHeights": [1.263, 1.417],
+      "letterSpacing": ["0.4px"],
+      "sourceSelectors": ["h1", "h2", "h3"]
+    },
+    "bodyFamily": {
+      "name": "BaloiseText",
+      "stack": "BaloiseText",
+      "weights": [400],
+      "sizes": ["16px"],
+      "lineHeights": [1.625],
+      "letterSpacing": ["normal"],
+      "sourceSelectors": ["main p", "p"]
+    },
+    "monoFamily": null,
+    "scaleRatio": null,
+    "scaleAudit": {
+      "kind": "ad-hoc",
+      "ratios": [1.583, 1.5],
+      "matchedScale": null,
+      "note": "h1/h2 both render at 38px/700 (no distinct h1 step observed on the crawled pages); h2→h3 is 1.583x, h3→body is 1.5x (exactly perfect-fifth) but the pair isn't consistent across the whole scale, so this reads as ad-hoc rather than a single modular ratio."
+    },
+    "loadStrategy": "unknown (fonts are embedded as base64 data: URIs inside @font-face rules rather than served as network files; no font-display value inspected)",
+    "files": [
+      {
+        "family": "BaloiseText",
+        "weight": 400,
+        "style": "normal",
+        "localPath": "stardust/current/assets/fonts/BaloiseText.woff",
+        "sourceCssRule": "@font-face { font-family: BaloiseText; src: url(\"data:font/woff;base64,...\") format(\"woff\"); font-weight: 400; font-style: normal; }",
+        "licensingFlag": "private"
+      },
+      {
+        "family": "BaloiseBold",
+        "weight": 700,
+        "style": "normal",
+        "localPath": "stardust/current/assets/fonts/BaloiseBold.woff",
+        "sourceCssRule": "@font-face { font-family: BaloiseBold; src: url(\"data:font/woff;base64,...\") format(\"woff\"); font-weight: 700; font-style: normal; }",
+        "licensingFlag": "private"
+      },
+      {
+        "family": "BaloiseMedium",
+        "weight": 400,
+        "style": "normal",
+        "localPath": "stardust/current/assets/fonts/BaloiseMedium.woff",
+        "sourceCssRule": "@font-face { font-family: BaloiseMedium; src: url(\"data:font/woff;base64,...\") format(\"woff\"); font-weight: 400; font-style: normal; }",
+        "licensingFlag": "private",
+        "note": "Declared font-weight is 400 in the @font-face rule despite the family name; recorded as declared, not corrected."
+      }
+    ]
+  },
+  "spacing": {
+    "baseUnit": 4,
+    "scale": [4, 8, 12, 16, 20, 24, 32, 48, 56, 64, 96, 128],
+    "sectionPadding": null,
+    "containerMaxWidth": "1496px",
+    "gridGap": null,
+    "sourceSelectors": ["--helvetia-space-*", "--helvetia-container-size-normal"],
+    "note": "Scale read directly from the --helvetia-space-* token ladder (0.25rem steps to 1rem, then a second desktop-responsive ladder to 8rem). sectionPadding/gridGap not captured — the crawler does not read per-section computed padding/gap; only tokens and sampled element styles were available this pass."
+  },
+  "motifs": {
+    "borderRadius": {
+      "primary": "4px",
+      "secondary": "12px",
+      "pill": "9999px",
+      "primarySources": ["--helvetia-radius-normal (buttons)"],
+      "occurrences": { "4px (buttons)": 10, "12px (cards/teasers)": 9 },
+      "sourceSelectors": ["--helvetia-radius-normal", "--helvetia-radius-large", "--helvetia-radius-rounded"]
+    },
+    "shadows": [
+      { "value": "0 4px 4px 0 rgba(0,7,57,0.15)", "uses": "header", "sourceSelector": "--helvetia-shadow-header" },
+      { "value": "0px 2px 5px 1px rgba(0,7,57,0.12)", "uses": "small elements", "sourceSelector": "--helvetia-shadow-small" },
+      { "value": "0 0 10px 0 rgba(0,7,57,0.15)", "uses": "normal elevation", "sourceSelector": "--helvetia-shadow-normal" },
+      { "value": "0 0 30px 0 rgba(0,7,57,0.15)", "uses": "large elevation (modals/overlays)", "sourceSelector": "--helvetia-shadow-large" }
+    ],
+    "gradients": [],
+    "patterns": [
+      { "name": "hero-with-image", "evidence": "home/privatkunden/geschaeftskunden/personnes-privees all open with a full-bleed photo hero + white overlaid card carrying the H1 and a primary CTA" },
+      { "name": "card-grid", "evidence": "4-up insurance-category card grid on privatkunden, geschaeftskunden, personnes-privees ('Sie leben Ihr Leben...' / 'Den besten Schutz...')" },
+      { "name": "stat-row", "evidence": "'Wir sind Helvetia' / 'Wir sind Helvetia Baloise' 4-up pastel stat-tile row present on privatkunden, geschaeftskunden, ueber-uns, and the group index page" },
+      { "name": "cta-band", "evidence": "full-width navy 'Kontaktieren Sie uns.' band with a light CTA button, present on privatkunden and geschaeftskunden" },
+      { "name": "article-teaser-strip", "evidence": "4-up 'Wissenswertes rund um...' article card strip near the footer on privatkunden and geschaeftskunden" }
+    ]
+  },
+  "componentStyle": {
+    "buttons": {
+      "primary": {
+        "background": "#000d6e",
+        "color": "#ffffff",
+        "borderRadius": "4px",
+        "padding": "16px 24px",
+        "fontWeight": 400,
+        "border": "2px solid #000d6e",
+        "shadow": "none"
+      },
+      "secondary": {
+        "background": "#ffffff",
+        "color": "#000d6e",
+        "borderRadius": "4px",
+        "padding": "16px 24px",
+        "fontWeight": 400,
+        "border": "2px solid #000d6e",
+        "shadow": "none"
+      },
+      "ghost": null
+    },
+    "dualCTAPattern": null,
+    "cards": {
+      "background": "#ffffff",
+      "borderRadius": "12px",
+      "padding": null,
+      "shadow": "none",
+      "border": "none",
+      "note": "Sampled cards show radius/background at the card container; internal padding lives on a nested element the sampler didn't isolate."
+    },
+    "inputs": null
+  },
+  "systemComponents": [
+    {
+      "name": "site-header",
+      "kind": "header",
+      "occurrences": 5,
+      "headingSequence": [],
+      "ctaLabels": ["Suche", "Login", "DE", "FR", "IT", "EN", "Privatkunden", "Unternehmen"],
+      "exampleSlug": "ch-web-de-privatkunden-html",
+      "exampleSelector": "header",
+      "examplePages": ["ch-web-de-privatkunden-html", "ch-web-de-geschaeftskunden-html", "ch-web-de-ueber-uns-helvetia-schweiz-html", "ch-web-fr-personnes-privees-html", "index"]
+    },
+    {
+      "name": "site-footer",
+      "kind": "footer",
+      "occurrences": 5,
+      "headingSequence": ["Jobs & Karriere", "Portal", "Über uns", "Blog"],
+      "ctaLabels": ["Impressum", "Rechtliche Hinweise", "Datenschutz", "Cookies"],
+      "exampleSlug": "ch-web-de-privatkunden-html",
+      "exampleSelector": "footer",
+      "examplePages": ["ch-web-de-privatkunden-html", "ch-web-de-geschaeftskunden-html", "ch-web-de-ueber-uns-helvetia-schweiz-html", "ch-web-fr-personnes-privees-html", "index"]
+    },
+    {
+      "name": "contact-cta-band",
+      "kind": "cta-band",
+      "occurrences": 2,
+      "headingSequence": ["Kontaktieren Sie uns.", "Wir sind für Sie da."],
+      "ctaLabels": ["Zur Kontaktübersicht"],
+      "exampleSlug": "ch-web-de-privatkunden-html",
+      "exampleSelector": "section.contact-band",
+      "examplePages": ["ch-web-de-privatkunden-html", "ch-web-de-geschaeftskunden-html"],
+      "note": "Below the formal ≥3-page / 50%-of-crawl detection threshold at this small cap (2/5 pages), but included because the heading pair is a verbatim repeat and the visual treatment (navy full-width band, identical layout) matches exactly in both screenshots."
+    },
+    {
+      "name": "wir-sind-helvetia-stat-row",
+      "kind": "other",
+      "occurrences": 4,
+      "headingSequence": ["Wir sind Helvetia"],
+      "ctaLabels": [],
+      "exampleSlug": "ch-web-de-privatkunden-html",
+      "exampleSelector": "section.stat-row",
+      "examplePages": ["ch-web-de-privatkunden-html", "ch-web-de-geschaeftskunden-html", "ch-web-de-ueber-uns-helvetia-schweiz-html", "index"],
+      "note": "4-up pastel stat tiles (customer count, years, locations, employees). Numbers differ per page/entity (Helvetia CH vs. Helvetia Baloise Gruppe) — a repeated component, not repeated content."
+    }
+  ],
+  "iconFont": null,
+  "voice": {
+    "heroHeadline": "Mehr als eine Versicherung",
+    "heroLede": "Helvetia – Ihre verlässliche Partnerin für alle Finanzfragen.",
+    "heroImage": {
+      "url": "https://www.helvetia.com/ch/web/de/privatkunden/_jcr_content/homeparsys-01/stage_176533507_copy_313079726/image.1782739486644.transform-fp/1440x810/startseite.jpg",
+      "alt": "startseite",
+      "source": "img",
+      "domPath": "main > section:first-child img"
+    },
+    "heroMedium": null,
+    "primaryCTALabel": "Mehr erfahren",
+    "ctaSamples": ["Mehr erfahren", "Mehr dazu", "Jetzt Check starten", "Zur Kontaktübersicht", "Alle Versicherungen"],
+    "navItems": ["Privatkunden", "Unternehmen", "Suche", "Login"],
+    "footerHeadings": ["Jobs & Karriere", "Portal", "Über uns", "Blog"],
+    "firstParagraph": "Helvetia und Baloise sind jetzt eins. Mehr dazu",
+    "tone": {
+      "guess": "professional-warm",
+      "evidence": "short declarative sentences, direct second-person address ('Sie leben Ihr Leben. Wir schützen, was Ihnen wichtig ist.'), warm lifestyle photography (family/couple imagery) paired with a formal insurer register"
+    }
+  },
+  "voiceTable": {
+    "ctaFrequency": [
+      { "label": "Mehr erfahren", "total": 9, "pageCount": 4, "pages": ["ch-web-de-privatkunden-html", "ch-web-de-geschaeftskunden-html", "ch-web-de-ueber-uns-helvetia-schweiz-html", "ch-web-fr-personnes-privees-html"] },
+      { "label": "Impressum", "total": 5, "pageCount": 5, "pages": ["ch-web-de-privatkunden-html", "ch-web-de-geschaeftskunden-html", "ch-web-de-ueber-uns-helvetia-schweiz-html", "ch-web-fr-personnes-privees-html", "index"] },
+      { "label": "Cookies", "total": 5, "pageCount": 5, "pages": ["ch-web-de-privatkunden-html", "ch-web-de-geschaeftskunden-html", "ch-web-de-ueber-uns-helvetia-schweiz-html", "ch-web-fr-personnes-privees-html", "index"] },
+      { "label": "Suche", "total": 4, "pageCount": 4, "pages": ["ch-web-de-privatkunden-html", "ch-web-de-geschaeftskunden-html", "ch-web-de-ueber-uns-helvetia-schweiz-html", "ch-web-fr-personnes-privees-html"] },
+      { "label": "Login", "total": 4, "pageCount": 4, "pages": ["ch-web-de-privatkunden-html", "ch-web-de-geschaeftskunden-html", "ch-web-de-ueber-uns-helvetia-schweiz-html", "ch-web-fr-personnes-privees-html"] },
+      { "label": "Rechtliche Hinweise", "total": 4, "pageCount": 4, "pages": [] },
+      { "label": "Datenschutz", "total": 4, "pageCount": 4, "pages": [] },
+      { "label": "Mehr dazu", "total": 3, "pageCount": 3, "pages": [] }
+    ],
+    "headingFrequency": [
+      { "text": "Mehr als eine Versicherung", "total": 3, "pageCount": 3, "level": "h1" },
+      { "text": "Kontaktieren Sie uns.", "total": 2, "pageCount": 2, "level": "h2" },
+      { "text": "Wir sind für Sie da.", "total": 2, "pageCount": 2, "level": "h3" }
+    ],
+    "toneMetrics": {
+      "headingsTotal": 33,
+      "headingsUppercasePercent": 0,
+      "distinctHeadings": 30,
+      "distinctCtaLabels": 41
+    }
+  },
+  "crossPromo": {
+    "detected": true,
+    "anchorHeading": "Kontaktieren Sie uns.",
+    "cluster": [
+      { "text": "Kontaktieren Sie uns.", "total": 2, "pageCount": 2, "overlap": 2 },
+      { "text": "Wir sind für Sie da.", "total": 2, "pageCount": 2, "overlap": 2 }
+    ],
+    "pages": ["ch-web-de-privatkunden-html", "ch-web-de-geschaeftskunden-html"],
+    "pageCount": 2,
+    "totalPages": 5
+  },
+  "register": "brand"
+}

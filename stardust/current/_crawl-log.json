@@ -1,0 +1,47 @@
+{
+  "_provenance": { "writtenBy": "stardust:extract", "writtenAt": "2026-08-10T12:00:00Z", "stardustVersion": "0.18.1" },
+  "discovery": {
+    "source": "BFS depth-1 from entry page nav links (crawl.mjs's built-in discovery; no sitemap.xml/sitemap_index.xml reachable at helvetia.com root during this run)",
+    "fetchedAt": "2026-08-10T11:27:00Z",
+    "discoveredCount": 5,
+    "filteredCount": 5,
+    "filteredAsJunk": [],
+    "waitMode": "medium",
+    "cappedAt": 5,
+    "cap": 5,
+    "capSource": "default",
+    "userChoice": null,
+    "kept": [
+      { "url": "https://www.helvetia.com/ch/web/de/privatkunden.html", "slug": "ch-web-de-privatkunden-html", "note": "entry URL (primary target)" },
+      { "url": "https://www.helvetia.com/ch/web/de/geschaeftskunden.html", "slug": "ch-web-de-geschaeftskunden-html", "note": "top-nav sibling audience (business customers) — IA-pillar coverage" },
+      { "url": "https://www.helvetia.com/ch/web/de/ueber-uns/helvetia-schweiz.html", "slug": "ch-web-de-ueber-uns-helvetia-schweiz-html", "note": "about/company page — distinct template" },
+      { "url": "https://www.helvetia.com/ch/web/fr/personnes-privees.html", "slug": "ch-web-fr-personnes-privees-html", "note": "French locale variant of the primary target — layout stress test per project CLAUDE.md" },
+      { "url": "https://www.helvetia.com/", "slug": "index", "note": "helvetia.com root, redirects to helvetia-baloise.com (merged group corporate site)" }
+    ],
+    "cut": [],
+    "malformed": [],
+    "requiresAuth": []
+  },
+  "crawl": {
+    "startedAt": "2026-08-10T11:27:00Z",
+    "finishedAt": "2026-08-10T11:28:15Z",
+    "successes": 5,
+    "failures": [],
+    "concurrency": 4,
+    "fetchTechnique": "headless"
+  },
+  "consent": {
+    "method": "auto",
+    "note": "Consent dismissal is per-browser-context (crawl.mjs, concurrency=4). Screenshots for geschaeftskunden and ueber-uns-helvetia-schweiz show the cookie banner still visibly rendered — the dismissal did not fire before capture on those two workers. The banner's own text is still correctly excluded from headings/body/ctas by the crawler's INTERSTITIAL regex filter (confirmed via each page's _signals.filteredInterstitials > 0), so this is a screenshot-only artifact, not a data-quality issue."
+  },
+  "visionCheck": [
+    { "slug": "ch-web-de-privatkunden-html", "verdict": "ok", "notes": "Hero photo + white CTA card, navy contact band, pastel stat-tile row, and card grid all match the extracted record. One empty grey placeholder box (product-finder/calculator widget) — noted separately, not a capture defect." },
+    { "slug": "ch-web-de-geschaeftskunden-html", "verdict": "ok", "notes": "Matches privatkunden's structure with business-audience copy, as expected. Cookie-consent banner still visible in the screenshot corner (see consent.note); underlying extracted content unaffected." },
+    { "slug": "ch-web-de-ueber-uns-helvetia-schweiz-html", "verdict": "ok", "notes": "Distinct template confirmed: numbers/facts row, 'Zahlen und Fakten' cards, footer with visible wordmark logo. Cookie-consent banner still visible (see consent.note)." },
+    { "slug": "ch-web-fr-personnes-privees-html", "verdict": "ok", "notes": "Clean French translation of privatkunden with matching layout; French CTA/heading strings run measurably longer, useful as the layout stress test." },
+    { "slug": "index", "verdict": "suspect", "notes": "https://www.helvetia.com/ redirects to https://www.helvetia-baloise.com/corporate/hb/de/home.html, which served a blocking country/language-selector modal ('Willkommen bei Helvetia Baloise Gruppe') at capture time. The captured headings/body reflect the modal, not the underlying corporate homepage. Not re-escalated (headed-Chrome retry) because this page is supplementary BFS-discovered evidence, not one of the primary 5 IA-pillar targets, and the merged-identity fact it was meant to evidence is already well-established from the other 4 pages' banner copy. Excluded from _brand-extraction.json cross-page aggregation; kept in current/pages/ for audit trail only." }
+  ],
+  "siblingCandidates": [
+    { "origin": "https://www.helvetia-baloise.com", "confidence": "high", "evidence": "same-brand redirect target of helvetia.com root; 'Helvetia und Baloise sind jetzt eins' banner links here from all 4 DE/FR pages", "decision": "not included (not passed as --brand-source this run; the modal-blocked capture at index.json is the only evidence gathered)" }
+  ]
+}

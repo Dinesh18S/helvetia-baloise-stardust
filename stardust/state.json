@@ -1,0 +1,100 @@
+{
+  "_provenance": {
+    "writtenBy": "stardust:direct",
+    "writtenAt": "2026-08-10T13:00:00Z",
+    "stardustVersion": "0.18.1"
+  },
+  "site": {
+    "originUrl": "https://www.helvetia.com/ch/web/de/privatkunden.html",
+    "deployUrl": null,
+    "extractedAt": "2026-08-10T11:28:00Z",
+    "pageCap": 5,
+    "totalDiscovered": 5,
+    "crawled": 5
+  },
+  "direction": {
+    "resolvedAt": "2026-08-10T13:00:00Z",
+    "phrase": "Direction: the merger is already in the CSS but not in the hierarchy. Keep: One-Navy Rule, BaloiseBold/BaloiseText, four pastel accents (accent-only), flat surfaces, direct second-person register. Change: promote merger message to hero, distinct H1/H2 step, font fallback stacks, carousel affordance, accessible names + main landmark, well-formed a11y tree. T-PALETTE: keep, don't expand. T-SCALE: adopt modular scale. CTA labels: nine 'Mehr erfahren' become nine specific labels.",
+    "directionFile": "stardust/direction.md",
+    "iaFidelity": "reimagined"
+  },
+  "pages": [
+    {
+      "slug": "ch-web-de-privatkunden-html",
+      "url": "https://www.helvetia.com/ch/web/de/privatkunden.html",
+      "title": "Versicherung und Vorsorge für Privatkunden | Helvetia.ch",
+      "type": null,
+      "status": "directed",
+      "history": [
+        { "status": "extracted", "at": "2026-08-10T11:27:57Z" },
+        { "status": "directed", "at": "2026-08-10T13:00:00Z" }
+      ],
+      "stale": false,
+      "staleReason": null,
+      "currentStatePath": "stardust/current/pages/ch-web-de-privatkunden-html.json",
+      "prototypePath": null,
+      "migratedPath": null
+    },
+    {
+      "slug": "ch-web-de-geschaeftskunden-html",
+      "url": "https://www.helvetia.com/ch/web/de/geschaeftskunden.html",
+      "title": "Versicherung und Vorsorge für Unternehmen | Helvetia.ch",
+      "type": null,
+      "status": "directed",
+      "history": [
+        { "status": "extracted", "at": "2026-08-10T11:27:40Z" },
+        { "status": "directed", "at": "2026-08-10T13:00:00Z" }
+      ],
+      "stale": false,
+      "staleReason": null,
+      "currentStatePath": "stardust/current/pages/ch-web-de-geschaeftskunden-html.json",
+      "prototypePath": null,
+      "migratedPath": null
+    },
+    {
+      "slug": "ch-web-de-ueber-uns-helvetia-schweiz-html",
+      "url": "https://www.helvetia.com/ch/web/de/ueber-uns/helvetia-schweiz.html",
+      "title": "Mehr als eine Versicherung | Helvetia.ch",
+      "type": null,
+      "status": "directed",
+      "history": [
+        { "status": "extracted", "at": "2026-08-10T11:27:45Z" },
+        { "status": "directed", "at": "2026-08-10T13:00:00Z" }
+      ],
+      "stale": false,
+      "staleReason": null,
+      "currentStatePath": "stardust/current/pages/ch-web-de-ueber-uns-helvetia-schweiz-html.json",
+      "prototypePath": null,
+      "migratedPath": null
+    },
+    {
+      "slug": "ch-web-fr-personnes-privees-html",
+      "url": "https://www.helvetia.com/ch/web/fr/personnes-privees.html",
+      "title": "Assurance et prévoyance pour particuliers | Helvetia.ch",
+      "type": null,
+      "status": "directed",
+      "history": [
+        { "status": "extracted", "at": "2026-08-10T11:28:10Z" },
+        { "status": "directed", "at": "2026-08-10T13:00:00Z" }
+      ],
+      "stale": false,
+      "staleReason": null,
+      "currentStatePath": "stardust/current/pages/ch-web-fr-personnes-privees-html.json",
+      "prototypePath": null,
+      "migratedPath": null
+    },
+    {
+      "slug": "index",
+      "url": "https://www.helvetia.com/",
+      "title": "Willkommen bei der Helvetia Baloise Gruppe | Helvetia Baloise Gruppe",
+      "type": null,
+      "status": "extracted",
+      "history": [{ "status": "extracted", "at": "2026-08-10T11:28:05Z" }],
+      "stale": false,
+      "staleReason": null,
+      "currentStatePath": "stardust/current/pages/index.json",
+      "prototypePath": null,
+      "migratedPath": null
+    }
+  ]
+}
